@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaheen Airlines - Home</title>
+    <style>
+        :root {
+            --dark-blue: #03366d;
+            --golden: #f4c542;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman';
+            font-size: 20px;
+            background-color: #f0f8ff;
+            background-image: url("photo-1530521954074-e64f6810b32d.jpg");
+            background-size: cover;
+            background-position: center;
+            color: var(--dark-blue);
+        }
+
+        .header {
+            background-color: var(--golden);
+            padding: 22px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1,
+        .header p {
+            font-family: 'Times New Roman';
+            color: var(--dark-blue);
+            margin: 0;
+            display: inline-block;
+            position: relative;
+            cursor: default;
+        }
+
+        .header h1 {
+            font-size: 36px;
+        }
+
+        .header p {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .header h1::after,
+        .header p::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background-color: var(--dark-blue);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .header h1:hover::after,
+        .header p:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Updated text banner styling with rich gradients, shadows, and smooth interactions */
+        .container p {
+            font-size: 22px; /* Slightly scaled up for a premium look */
+            background: linear-gradient(135deg, var(--golden) 0%, #ffe066 100%);
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 30px; /* Fully rounded elegant pill style */
+            border: 2px solid rgba(3, 54, 109, 0.15);
+            font-family: 'Times New Roman';
+            color: var(--dark-blue);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            letter-spacing: 0.5px;
+            font-weight: bold;
+            cursor: default;
+        }
+
+        .container p:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(3, 54, 109, 0.25);
+            border-color: var(--dark-blue);
+        }
+
+        .button {
+            margin: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-family: 'Times New Roman';
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            background-color: #ffe066;
+        }
+
+        .gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 50px 0;
+        }
+
+        .gallery img {
+            width: 300px;
+            height: 200px;
+            margin: 15px;
+            border: 4px solid var(--golden);
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.08) translateY(-8px) rotate(1deg);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+            border-color: #ffe066;
+        }
+
+        .destinations-heading {
+            text-align: center;
+            margin: 35px 0 10px 0;
+        }
+
+        .destinations-heading h2 {
+            font-family: 'Times New Roman';
+            font-size: 32px;
+            color: var(--dark-blue);
+            background: linear-gradient(135deg, var(--golden) 0%, #ffe066 100%);
+            display: inline-block;
+            padding: 10px 34px;
+            border-radius: 30px;
+            border: 2px solid rgba(3, 54, 109, 0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            margin: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .destinations-heading h2:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .destination-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 30px 0 30px 0;
+            padding: 0 20px;
+        }
+
+        .destination-card {
+            width: 280px;
+            background-color: rgba(255, 255, 255, 0.94);
+            border: 3px solid var(--golden);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+            text-align: center;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.45);
+            border-color: #ffe066;
+        }
+
+        .destination-card img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 3px solid var(--golden);
+        }
+
+        .destination-card .destination-body {
+            padding: 16px 18px 22px 18px;
+        }
+
+        .destination-card h3 {
+            font-family: 'Times New Roman';
+            font-size: 24px;
+            color: var(--dark-blue);
+            margin: 0 0 10px 0;
+        }
+
+        .destination-card .starting-from {
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: rgba(3, 54, 109, 0.75);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .destination-card .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin: 4px 0 16px 0;
+        }
+
+        .destination-card .book-now-btn {
+            display: inline-block;
+            padding: 10px 26px;
+            font-size: 17px;
+            font-family: 'Times New Roman';
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .destination-card .book-now-btn:hover {
+            transform: scale(1.06);
+            background-color: #ffe066;
+        }
+
+        .contact-section {
+            padding: 15px 20px 55px 20px;
+            background-color: rgba(3, 54, 109, 0.9);
+            text-align: left;
+            color: #fff;
+            font-family: 'Times New Roman';
+            font-size: 20px;
+            position: relative;
+        }
+
+        .contact-button {
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Times New Roman';
+            font-size: 20px;
+            transition: all 0.3s ease;
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+        }
+
+        .contact-button:hover {
+            background-color: #ffe066;
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .contact-button:active {
+            transform: scale(0.96);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #contact-info {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--golden);
+            max-width: 300px;
+            line-height: 1.6;
+            font-size: 20px;
+            color: #fff;
+            font-family: 'Times New Roman';
+            position: absolute;
+            bottom: 65px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        /* ===================== DIGITAL CLOCK ===================== */
+        .clock-card {
+            position: absolute;
+            top: 100%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--dark-blue), #06549e);
+            border: 2px solid var(--golden);
+            border-radius: 16px;
+            padding: 12px 26px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            font-family: 'Times New Roman';
+            z-index: 5;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: default;
+        }
+
+        .clock-card:hover {
+            transform: translateY(-53%) scale(1.05);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+            border-color: #ffe066;
+        }
+
+        .clock-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--golden);
+            font-weight: bold;
+        }
+
+        .clock-time {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 2px 0 6px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .clock-date-label {
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--golden);
+            font-weight: bold;
+        }
+
+        .clock-date {
+            font-size: 13px;
+            margin-top: 1px;
+        }
+
+        /* ===================== DEPARTURE WEATHER ===================== */
+        .home-weather-heading {
+            text-align: center;
+            margin: 35px 0 10px 0;
+        }
+
+        .home-weather-heading h2 {
+            font-family: 'Times New Roman';
+            font-size: 32px;
+            color: var(--dark-blue);
+            background: linear-gradient(135deg, var(--golden) 0%, #ffe066 100%);
+            display: inline-block;
+            padding: 10px 34px;
+            border-radius: 30px;
+            border: 2px solid rgba(3, 54, 109, 0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            margin: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .home-weather-heading h2:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .home-weather-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin: 22px 0 35px 0;
+            padding: 0 20px;
+        }
+
+        .home-weather-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-weather-section select {
+            font-family: 'Times New Roman';
+            font-size: 18px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 2px solid var(--golden);
+            background-color: #fff;
+            color: var(--dark-blue);
+            cursor: pointer;
+        }
+
+        .home-weather-clear-btn {
+            font-family: 'Times New Roman';
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid var(--golden);
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .home-weather-clear-btn:hover {
+            background-color: #ffe066;
+            transform: scale(1.06);
+        }
+
+        .home-weather-card {
+            display: none;
+            align-items: center;
+            gap: 18px;
+            background: linear-gradient(135deg, var(--dark-blue), #06549e);
+            color: #fff;
+            border-radius: 12px;
+            padding: 14px 24px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            font-family: Arial, sans-serif;
+            border: 1.5px solid var(--golden);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .home-weather-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45);
+            border-color: #ffe066;
+        }
+
+        .home-weather-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+
+        .home-weather-info {
+            flex: 1;
+        }
+
+        .home-weather-city {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--golden);
+            margin-bottom: 2px;
+        }
+
+        .home-weather-temp {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .home-weather-desc {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Welcome to Shaheen Airlines</h1>
+        <br>
+        <p>Your Journey Begins Here</p>
+
+        <div class="clock-card">
+            <div class="clock-label">Pakistan Standard Time</div>
+            <div class="clock-time" id="clockTime">&mdash;</div>
+            <div class="clock-date-label">Today's Date</div>
+            <div class="clock-date" id="clockDate">&mdash;</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <p>Explore our airline, discover new destinations, and book your flights with comfort and ease.</p>
+        <br>
+        <a href="about.html"><button class="button">About Us</button></a>
+        <a href="booking.html"><button class="button">Schedule & Book Tickets</button></a>
+        <a href="experience.html"><button class="button">In-Flight Experience</button></a>
+    </div>
+
+    <div class="destinations-heading">
+        <h2>Popular Destinations</h2>
+    </div>
+
+    <div class="destination-cards">
+        <div class="destination-card">
+            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop" alt="Dubai">
+            <div class="destination-body">
+                <h3>Dubai</h3>
+                <p class="starting-from">Starting From</p>
+                <p class="price">PKR 92,000</p>
+                <a href="booking.html"><button class="book-now-btn">Book Now</button></a>
+            </div>
+        </div>
+
+        <div class="destination-card">
+            <img src="https://images.unsplash.com/photo-1600298881974-6be191ceeda1?q=80&w=800&auto=format&fit=crop" alt="Jeddah">
+            <div class="destination-body">
+                <h3>Jeddah</h3>
+                <p class="starting-from">Starting From</p>
+                <p class="price">PKR 120,000</p>
+                <a href="booking.html"><button class="book-now-btn">Book Now</button></a>
+            </div>
+        </div>
+
+        <div class="destination-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqBzDDwdUy0utUKOHqvDng8qk6gf4LgpkR4hFZZE2yCQ&s=10" alt="Lahore">
+            <div class="destination-body">
+                <h3>Lahore</h3>
+                <p class="starting-from">Starting From</p>
+                <p class="price">PKR 32,000</p>
+                <a href="booking.html"><button class="book-now-btn">Book Now</button></a>
+            </div>
+        </div>
+
+        <div class="destination-card">
+            <img src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?q=80&w=800&auto=format&fit=crop" alt="Muscat">
+            <div class="destination-body">
+                <h3>Muscat</h3>
+                <p class="starting-from">Starting From</p>
+                <p class="price">PKR 84,000</p>
+                <a href="booking.html"><button class="book-now-btn">Book Now</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-weather-heading">
+        <h2>Check Departure Weather</h2>
+    </div>
+
+    <div class="home-weather-section">
+        <div class="home-weather-field">
+            <select id="homeWeatherSelect">
+                <option value="" disabled selected>Select Your Departure City</option>
+                <option>Karachi</option>
+                <option>Lahore</option>
+                <option>Islamabad</option>
+                <option>Sialkot</option>
+                <option>Dubai</option>
+                <option>Muscat</option>
+                <option>Jeddah</option>
+                <option>Beijing</option>
+            </select>
+            <button type="button" class="home-weather-clear-btn" onclick="clearHomeWeather()" title="Clear selection">&times;</button>
+        </div>
+
+        <div class="home-weather-card" id="homeWeatherCard">
+            <div class="home-weather-icon" id="homeWeatherIcon">&#127760;</div>
+            <div class="home-weather-info">
+                <div class="home-weather-city" id="homeWeatherCity">&mdash;</div>
+                <div class="home-weather-temp" id="homeWeatherTemp">&mdash;</div>
+                <div class="home-weather-desc" id="homeWeatherDesc">Select a city to see current weather</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-section">
+    <button class="contact-button" onclick="toggleContact()">Contact Us</button>
+
+    <div id="contact-info">
+        <strong>Email:</strong> ShaheenAirlines@gmail.com<br>
+        <strong>Phone:</strong> 0327-9736400
+    </div>
+
+    <div style="text-align:center; margin-top:25px;">
+        <a href="https://www.facebook.com" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" width="40" style="margin:0 10px;">
+        </a>
+
+        <a href="https://www.instagram.com" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" width="40" style="margin:0 10px;">
+        </a>
+
+        <a href="https://www.twitter.com" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" width="40" style="margin:0 10px;">
+        </a>
+
+        <a href="https://www.youtube.com" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" width="40" style="margin:0 10px;">
+        </a>
+    </div>
+</div>
+
+    <script>
+        function toggleContact() {
+            const info = document.getElementById("contact-info");
+            info.style.display = (info.style.display === "block") ? "none" : "block";
+        }
+
+        /* ===================== DIGITAL CLOCK (Pakistan Standard Time) ===================== */
+        function updateClock() {
+            const now = new Date();
+
+            const time = now.toLocaleTimeString('en-US', {
+                timeZone: 'Asia/Karachi',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            const date = now.toLocaleDateString('en-GB', {
+                timeZone: 'Asia/Karachi',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            document.getElementById('clockTime').textContent = time;
+            document.getElementById('clockDate').textContent = date;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        /* ===================== DEPARTURE WEATHER ===================== */
+        const homeCityCoords = {
+            Karachi:   { lat: 24.8607, lon: 67.0011 },
+            Lahore:    { lat: 31.5497, lon: 74.3436 },
+            Islamabad: { lat: 33.6844, lon: 73.0479 },
+            Sialkot:   { lat: 32.4945, lon: 74.5229 },
+            Dubai:     { lat: 25.2048, lon: 55.2708 },
+            Muscat:    { lat: 23.5880, lon: 58.3829 },
+            Jeddah:    { lat: 21.4858, lon: 39.1925 },
+            Beijing:   { lat: 39.9042, lon: 116.4074 }
+        };
+
+        const homeWeatherCodeMap = {
+            0:  { desc: 'Clear sky',            icon: '☀️' },
+            1:  { desc: 'Mainly clear',         icon: '🌤️' },
+            2:  { desc: 'Partly cloudy',        icon: '⛅' },
+            3:  { desc: 'Overcast',             icon: '☁️' },
+            45: { desc: 'Fog',                  icon: '🌫️' },
+            48: { desc: 'Depositing rime fog',  icon: '🌫️' },
+            51: { desc: 'Light drizzle',        icon: '🌦️' },
+            53: { desc: 'Moderate drizzle',     icon: '🌦️' },
+            55: { desc: 'Dense drizzle',        icon: '🌧️' },
+            61: { desc: 'Slight rain',          icon: '🌧️' },
+            63: { desc: 'Moderate rain',        icon: '🌧️' },
+            65: { desc: 'Heavy rain',           icon: '🌧️' },
+            71: { desc: 'Slight snow fall',     icon: '🌨️' },
+            73: { desc: 'Moderate snow fall',   icon: '🌨️' },
+            75: { desc: 'Heavy snow fall',      icon: '❄️' },
+            80: { desc: 'Rain showers',         icon: '🌦️' },
+            81: { desc: 'Moderate showers',     icon: '🌧️' },
+            82: { desc: 'Violent showers',      icon: '⛈️' },
+            95: { desc: 'Thunderstorm',         icon: '⛈️' },
+            96: { desc: 'Thunderstorm & hail',  icon: '⛈️' },
+            99: { desc: 'Severe thunderstorm',  icon: '⛈️' }
+        };
+
+        async function fetchHomeWeather(city) {
+            const card = document.getElementById('homeWeatherCard');
+            const coords = homeCityCoords[city];
+            if (!coords) { card.style.display = 'none'; return; }
+
+            card.style.display = 'flex';
+            document.getElementById('homeWeatherCity').textContent = city;
+            document.getElementById('homeWeatherTemp').textContent = 'Loading…';
+            document.getElementById('homeWeatherDesc').textContent = 'Fetching current weather';
+            document.getElementById('homeWeatherIcon').textContent = '🌐';
+
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true`;
+                const res = await fetch(url);
+                const data = await res.json();
+                const cw = data.current_weather;
+                const info = homeWeatherCodeMap[cw.weathercode] || { desc: 'Weather update', icon: '🌍' };
+
+                document.getElementById('homeWeatherIcon').textContent = info.icon;
+                document.getElementById('homeWeatherTemp').textContent = `${Math.round(cw.temperature)}°C`;
+                document.getElementById('homeWeatherDesc').textContent = `${info.desc} • Wind ${Math.round(cw.windspeed)} km/h in ${city}`;
+            } catch (err) {
+                document.getElementById('homeWeatherIcon').textContent = '⚠️';
+                document.getElementById('homeWeatherTemp').textContent = 'Unavailable';
+                document.getElementById('homeWeatherDesc').textContent = 'Could not load live weather right now.';
+            }
+        }
+
+        document.getElementById('homeWeatherSelect').addEventListener('change', function () {
+            if (this.value) {
+                fetchHomeWeather(this.value);
+            } else {
+                document.getElementById('homeWeatherCard').style.display = 'none';
+            }
+        });
+
+        function clearHomeWeather() {
+            document.getElementById('homeWeatherSelect').value = '';
+            document.getElementById('homeWeatherCard').style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shaheen Airlines - In-Flight Experience</title>
+    <style>
+        :root {
+            --dark-blue: #03366d;
+            --golden: #f4c542;
+        }
+
+        body {
+            font-family: 'Times New Roman';
+            background-image: url("pexels-brett-sayles-3140204.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 130px;
+            color: #ffffff;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            text-decoration: none;
+            color: rgb(46, 88, 179);
+            background-color: var(--golden);
+            display: inline-block;
+            padding: 15px 40px;
+            margin-top: 30px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 4px solid var(--dark-blue);
+            cursor: default;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        h1:hover {
+            transform: translateY(3px);
+            background-color: #ffe066;
+            color: var(--dark-blue);
+            box-shadow: 0 8px 25px rgba(244, 197, 66, 0.4);
+            border-bottom-color: rgb(46, 88, 179);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #f2f2f2;
+            max-width: 640px;
+            margin: 16px auto 0 auto;
+            line-height: 1.5;
+            background-color: rgba(3, 54, 109, 0.75);
+            border: 1px solid rgba(244, 197, 66, 0.5);
+            border-radius: 12px;
+            padding: 14px 26px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .bottom-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .bottom-button:hover {
+            background-color: #ffe066;
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .bottom-button:active {
+            transform: scale(0.96);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #contact-button {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-wrap: wrap-reverse;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        #contact-info {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border: 1px solid var(--golden);
+            border-radius: 5px;
+            text-align: left;
+            z-index: 100;
+        }
+
+        /* ===================== SHARED SECTION SYSTEM (same as About Us) ===================== */
+
+        .section-heading-wrap {
+            text-align: center;
+        }
+
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--dark-blue);
+            background-color: var(--golden);
+            display: inline-block;
+            padding: 10px 32px;
+            border-radius: 6px;
+            margin: 55px auto 22px auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .section-heading:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .content-panel {
+            background-color: rgba(3, 54, 109, 0.85);
+            padding: 30px 40px;
+            border: 2px solid var(--golden);
+            border-radius: 12px;
+            margin: 0 auto;
+            width: 80%;
+            max-width: 850px;
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .content-panel:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.6);
+            border-color: #ffe066;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            border-bottom: 1px solid rgba(244, 197, 66, 0.25);
+            padding-bottom: 8px;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .spec-label {
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .spec-value {
+            font-weight: bold;
+            color: var(--golden);
+            text-align: right;
+            font-size: 15px;
+            flex: 1;
+        }
+
+        /* ---- Tab buttons (cabin class / fleet) ---- */
+        .tab-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--dark-blue);
+            border: 2px solid rgba(3, 54, 109, 0.2);
+            border-radius: 24px;
+            padding: 10px 24px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--golden), #ffe066);
+            border-color: var(--golden);
+            color: var(--dark-blue);
+            box-shadow: 0 6px 16px rgba(244, 197, 66, 0.45);
+        }
+
+        /* ---- 3D-style cabin showcase ---- */
+        .cabin-showcase {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: stretch;
+            text-align: left;
+        }
+
+        .cabin-photo-stage {
+            flex: 1 1 320px;
+            min-width: 280px;
+            perspective: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cabin-photo-frame {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 3px solid var(--golden);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+            transform: rotateY(-14deg) rotateX(2deg) scale(0.97);
+            transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.5s ease;
+        }
+
+        .cabin-photo-frame:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+            box-shadow: 0 26px 50px rgba(0, 0, 0, 0.65);
+        }
+
+        .cabin-photo-frame img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cabin-caption {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .cabin-details {
+            flex: 1 1 340px;
+            min-width: 280px;
+        }
+
+        .cabin-details h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--golden);
+            font-size: 22px;
+            margin: 0 0 12px 0;
+            text-align: left;
+        }
+
+        .cabin-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .amenity-list {
+            margin: 0 0 4px 0;
+            padding-left: 20px;
+            text-align: left;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #f2f2f2;
+        }
+
+        /* ---- Seat pitch calculator ---- */
+        .pitch-calculator {
+            margin-top: 22px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(244, 197, 66, 0.4);
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-align: left;
+        }
+
+        .pitch-calculator label {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--golden);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .pitch-calculator input {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            border: none;
+            width: 90px;
+            margin-right: 10px;
+        }
+
+        .pitch-calculator button {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            background: var(--golden);
+            color: var(--dark-blue);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .pitch-calculator button:hover {
+            background: #ffe066;
+            transform: scale(1.05);
+        }
+
+        .pitch-result {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        /* ---- Meal menu with diet filters ---- */
+        .meal-section {
+            margin-top: 26px;
+            text-align: left;
+        }
+
+        .meal-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .diet-btn {
+            font-family: Arial, sans-serif;
+            font-size: 12.5px;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(244, 197, 66, 0.6);
+            background: transparent;
+            color: var(--golden);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .diet-btn:hover {
+            background: rgba(244, 197, 66, 0.2);
+        }
+
+        .diet-btn.active {
+            background: var(--golden);
+            color: var(--dark-blue);
+        }
+
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .meal-column {
+            min-width: 0;
+        }
+
+        .meal-column.hidden-column {
+            display: none;
+        }
+
+        .meal-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 7px;
+        }
+
+        .meal-item .meal-name {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+
+        .meal-item .meal-tags {
+            font-size: 10px;
+            color: var(--golden);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 3px;
+        }
+
+        .meal-item.hidden-meal {
+            display: none;
+        }
+
+        .meal-category-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--golden);
+            font-size: 15px;
+            margin: 0 0 8px 0;
+            border-bottom: 1px solid rgba(244, 197, 66, 0.35);
+            padding-bottom: 4px;
+        }
+
+        @media (max-width: 700px) {
+            .meal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ---- Wi-Fi tier ---- */
+        .wifi-tier {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .wifi-icon {
+            font-size: 26px;
+        }
+
+        .wifi-tier-name {
+            font-weight: bold;
+            color: var(--golden);
+            font-size: 15px;
+        }
+
+        .wifi-tier-desc {
+            font-size: 13.5px;
+            color: #f2f2f2;
+        }
+
+        /* ---- Cockpit & Lounge panels ---- */
+        .feature-panel {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            align-items: center;
+            text-align: left;
+        }
+
+        .feature-photo {
+            flex: 1 1 300px;
+            min-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid var(--golden);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+            transform: perspective(900px) rotateY(6deg);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .feature-photo:hover {
+            transform: perspective(900px) rotateY(0deg) scale(1.02);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.6);
+        }
+
+        .feature-photo img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .feature-text {
+            flex: 1 1 300px;
+            min-width: 260px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #f2f2f2;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ---- Fleet tour showcase ---- */
+        .fleet-showcase {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            align-items: center;
+            text-align: left;
+        }
+
+        .fleet-photo-frame {
+            flex: 1 1 300px;
+            min-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid var(--golden);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+            transform: perspective(1000px) rotateY(-6deg);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .fleet-photo-frame:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.6);
+        }
+
+        .fleet-photo-frame img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .fleet-info {
+            flex: 1 1 300px;
+            min-width: 260px;
+        }
+
+        .fleet-info h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--golden);
+            font-size: 24px;
+            margin: 0 0 12px 0;
+            text-align: left;
+        }
+
+        .cabin-config-note {
+            margin-top: 14px;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #f2f2f2;
+            text-align: left;
+        }
+
+        @media (max-width: 700px) {
+            .cabin-photo-frame,
+            .feature-photo,
+            .fleet-photo-frame {
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>In-Flight Experience &amp; Fleet Tour</h1>
+    <p class="subtitle">Step inside before you fly. Browse every cabin class, take a look at the flight deck and our lounges, and explore each aircraft in our fleet &mdash; all before you book.</p>
+    <br>
+
+    <!-- ===================== CABIN CLASS SHOWCASE ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Cabin Class Showcase</h2>
+    </div>
+    <div class="content-panel" id="cabin-panel">
+        <div class="tab-row" id="cabinTabs">
+            <button type="button" class="tab-btn active" data-cabin="economy" onclick="selectCabin('economy')">Economy Class</button>
+            <button type="button" class="tab-btn" data-cabin="business" onclick="selectCabin('business')">Business Class</button>
+            <button type="button" class="tab-btn" data-cabin="first" onclick="selectCabin('first')">First Class</button>
+        </div>
+
+        <div class="cabin-showcase">
+            <div class="cabin-photo-stage">
+                <div>
+                    <div class="cabin-photo-frame">
+                        <img id="cabinPhoto" src="https://images.unsplash.com/photo-1762960246763-dcb1e92b0b58?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" alt="Economy Class cabin interior">
+                    </div>
+                    <div class="cabin-caption" id="cabinCaption">Economy Class &mdash; a real look inside the cabin</div>
+                </div>
+            </div>
+
+            <div class="cabin-details">
+                <h3 id="cabinTitle">Economy Class</h3>
+                <div class="cabin-specs" id="cabinSpecs">
+                    <div class="spec-row"><span class="spec-label">Seat Pitch</span><span class="spec-value">31&ndash;32 in</span></div>
+                    <div class="spec-row"><span class="spec-label">Recline</span><span class="spec-value">4&ndash;6&deg;</span></div>
+                    <div class="spec-row"><span class="spec-label">Seat Width</span><span class="spec-value">17.5 in</span></div>
+                </div>
+                <ul class="amenity-list" id="cabinAmenities">
+                    <li>Adjustable headrest &amp; personal reading light</li>
+                    <li>USB-A charging port at every seat</li>
+                    <li>Seatback tray table &amp; footrest bar</li>
+                </ul>
+
+                <div class="wifi-tier">
+                    <div class="wifi-icon">&#128225;</div>
+                    <div>
+                        <div class="wifi-tier-name" id="wifiTierName">Basic Wi-Fi &mdash; up to 3 Mbps</div>
+                        <div class="wifi-tier-desc" id="wifiTierDesc">Great for messaging, email, and light browsing.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pitch-calculator">
+            <label for="heightInput">Seat Pitch Calculator &mdash; enter your height to check your legroom fit in the selected class</label>
+            <input type="number" id="heightInput" placeholder="Height in cm" min="120" max="230">
+            <button type="button" onclick="calculatePitch()">Check My Fit</button>
+            <div class="pitch-result" id="pitchResult"></div>
+        </div>
+
+        <div class="meal-section">
+            <h3 style="font-family:'Playfair Display', serif; color: var(--golden); margin-bottom: 10px;">Complimentary Meal Menu</h3>
+            <div class="meal-filters" id="mealFilters">
+                <button type="button" class="diet-btn active" data-diet="all" onclick="filterMeals('all')">All</button>
+                <button type="button" class="diet-btn" data-diet="halal" onclick="filterMeals('halal')">Halal</button>
+                <button type="button" class="diet-btn" data-diet="vegetarian" onclick="filterMeals('vegetarian')">Vegetarian</button>
+                <button type="button" class="diet-btn" data-diet="vegan" onclick="filterMeals('vegan')">Vegan</button>
+                <button type="button" class="diet-btn" data-diet="gluten-free" onclick="filterMeals('gluten-free')">Gluten-Free</button>
+            </div>
+            <div class="meal-grid" id="mealList"></div>
+        </div>
+    </div>
+
+    <!-- ===================== COCKPIT VIEW ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Cockpit View</h2>
+    </div>
+    <div class="content-panel" id="cockpit-panel">
+        <div class="tab-row" id="cockpitTabs">
+            <button type="button" class="tab-btn active" data-cockpit="deck" onclick="selectCockpitImage('deck')">Flight Deck</button>
+            <button type="button" class="tab-btn" data-cockpit="panel" onclick="selectCockpitImage('panel')">Control Panel</button>
+            <button type="button" class="tab-btn" data-cockpit="window" onclick="selectCockpitImage('window')">Window View</button>
+        </div>
+        <div class="feature-panel">
+            <div class="feature-photo">
+                <img id="cockpitPhoto" src="cockpit.jpg" alt="Flight Deck">
+            </div>
+            <div class="feature-text">
+                <p>Every Shaheen Airlines flight is led by a two-pilot crew working from a modern glass cockpit, with digital flight displays, weather radar, and an autopilot &amp; flight management system that keeps every leg smooth from pushback to touchdown.</p>
+                <p>Curious passengers are welcome to peek in during boarding on select flights &mdash; ask your cabin crew if a flight deck visit is available before departure.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== ONBOARD LOUNGES ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Onboard Lounges</h2>
+    </div>
+    <div class="content-panel" id="lounge-panel">
+        <div class="tab-row" id="loungeTabs">
+    <button type="button" class="tab-btn active" data-lounge="seating" onclick="selectLoungeImage('seating')">Lounge Area</button>
+    <button type="button" class="tab-btn" data-lounge="bar" onclick="selectLoungeImage('bar')">Bar &amp; Refreshments</button>
+    <button type="button" class="tab-btn" data-lounge="window" onclick="selectLoungeImage('window')">Sitting Area</button>
+</div>
+        <div class="feature-panel">
+            <div class="feature-photo">
+                <img id="loungePhoto" src="lounge.jpg" alt="Lounge Seating">
+            </div>
+            <div class="feature-text">
+                <p>Passengers can relax during the flight in our dedicated onboard lounge, featuring comfortable seating, complimentary refreshments, and a spacious atmosphere to stretch, socialize, or unwind away from their seats.</p>
+                <p>On our long-haul Boeing 777, passengers can step into the onboard social lounge — a shared space to stretch, chat, or enjoy a drink mid-flight before returning to their seats and continuing their journey in comfort.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== EXPLORE OUR FLEET ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Explore Our Fleet</h2>
+    </div>
+    <div class="content-panel" id="fleet-tour-panel">
+        <div class="tab-row" id="fleetTabs">
+            <button type="button" class="tab-btn active" data-plane="a320" onclick="selectPlane('a320')">Airbus A320</button>
+            <button type="button" class="tab-btn" data-plane="b737" onclick="selectPlane('b737')">Boeing 737</button>
+            <button type="button" class="tab-btn" data-plane="a319" onclick="selectPlane('a319')">Airbus A319</button>
+            <button type="button" class="tab-btn" data-plane="a321" onclick="selectPlane('a321')">Airbus A321</button>
+            <button type="button" class="tab-btn" data-plane="b777" onclick="selectPlane('b777')">Boeing 777</button>
+        </div>
+
+        <div class="fleet-showcase">
+            <div class="fleet-photo-frame">
+                <img id="fleetPhoto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg/330px-Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg" alt="Airbus A320 exterior">
+            </div>
+            <div class="fleet-info">
+                <h3 id="fleetTitle">Airbus A320</h3>
+                <div class="cabin-specs" id="fleetSpecs">
+                    <div class="spec-row"><span class="spec-label">Seats</span><span class="spec-value">180</span></div>
+                    <div class="spec-row"><span class="spec-label">Speed</span><span class="spec-value">840 km/h</span></div>
+                    <div class="spec-row"><span class="spec-label">Range</span><span class="spec-value">6,150 km</span></div>
+                    <div class="spec-row"><span class="spec-label">Used For</span><span class="spec-value">Domestic &amp; International Flights</span></div>
+                </div>
+                <p class="cabin-config-note" id="fleetConfigNote">180 seats across a two-class Economy and Business layout &mdash; our regional and international workhorse.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-info">
+        <strong>Email:</strong> ShaheenAirlines@gmail.com<br>
+        <strong>Phone:</strong> 0327-9736400
+    </div>
+
+    <button class="bottom-button" id="contact-button" onclick="toggleContact()">
+    Contact Us
+</button>
+
+<div class="bottom-nav">
+    <a href="index.html">
+        <button class="bottom-button">
+            Home
+        </button>
+    </a>
+
+    <a href="about.html">
+        <button class="bottom-button">
+            About Us
+        </button>
+    </a>
+
+    <a href="booking.html">
+        <button class="bottom-button">
+            Schedule &amp; Book Tickets
+        </button>
+    </a>
+</div>
+
+    <script>
+        function toggleContact() {
+            const contactInfo = document.getElementById("contact-info");
+            contactInfo.style.display = contactInfo.style.display === "block" ? "none" : "block";
+        }
+
+        /* ===================== CABIN CLASS SHOWCASE ===================== */
+        const cabinData = {
+            economy: {
+                label: 'Economy Class',
+                photo: 'https://images.unsplash.com/photo-1762960246763-dcb1e92b0b58?q=80&w=1200&auto=format&fit=crop',
+                caption: 'Economy Class &mdash; a real look inside the cabin',
+                specs: [
+                    ['Seat Pitch', '31&ndash;32 in'],
+                    ['Recline', '4&ndash;6&deg;'],
+                    ['Seat Width', '17.5 in']
+                ],
+                amenities: [
+                    'Adjustable headrest &amp; personal reading light',
+                    'USB-A charging port at every seat',
+                    'Seatback tray table &amp; footrest bar'
+                ],
+                wifiName: 'Basic Wi-Fi &mdash; up to 3 Mbps',
+                wifiDesc: 'Great for messaging, email, and light browsing.',
+                pitchComfortable: 175,
+                pitchSnug: 190
+            },
+            business: {
+                label: 'Business Class',
+                photo: 'https://images.unsplash.com/photo-1706945629188-60679cd384b3?q=80&w=1200&auto=format&fit=crop',
+                caption: 'Business Class &mdash; a real look inside the cabin',
+                specs: [
+                    ['Seat Pitch', '42&ndash;45 in'],
+                    ['Recline', 'Up to 160&deg;'],
+                    ['Seat Width', '20&ndash;22 in']
+                ],
+                amenities: [
+                    'Extra recline with leg &amp; foot rest',
+                    'Noise-cancelling headphones &amp; larger IFE screen',
+                    'Priority meal service &amp; amenity kit'
+                ],
+                wifiName: 'Premium Wi-Fi &mdash; up to 12 Mbps',
+                wifiDesc: 'Smooth enough for video calls and HD streaming.',
+                pitchComfortable: 195,
+                pitchSnug: 205
+            },
+            first: {
+                label: 'First Class',
+                photo: 'https://images.unsplash.com/photo-1718948740023-ebb6e6f9cf6e?q=80&w=1200&auto=format&fit=crop',
+                caption: 'First Class &mdash; a real look inside the suite',
+                specs: [
+                    ['Seat Pitch', '78&ndash;80 in'],
+                    ['Recline', '180&deg; full-flat bed'],
+                    ['Seat Width', '27&ndash;30 in suite']
+                ],
+                amenities: [
+                    'Private suite with closing door',
+                    'Turndown service &amp; premium bedding',
+                    'Chauffeur-style seating &amp; a la carte dining'
+                ],
+                wifiName: 'Elite Wi-Fi &mdash; up to 25+ Mbps',
+                wifiDesc: 'Unlimited high-speed access for the whole flight.',
+                pitchComfortable: 215,
+                pitchSnug: 999
+            }
+        };
+
+        const mealData = {
+            economy: {
+                Mains: [
+                    { name: 'Chicken Biryani', diets: ['halal'] },
+                    { name: 'Vegetable Curry &amp; Rice', diets: ['vegetarian', 'vegan'] },
+                    { name: 'Beef Karahi', diets: ['halal'] },
+                    { name: 'Grilled Chicken Sandwich', diets: ['halal'] },
+                    { name: 'Fresh Fruit Plate', diets: ['vegan', 'gluten-free'] }
+                ],
+                Drinks: [
+                    { name: 'Soft Drinks &amp; Juices', diets: [] },
+                    { name: 'Tea &amp; Coffee', diets: [] },
+                    { name: 'Bottled Water', diets: [] },
+                    { name: 'Hot Chocolate', diets: [] }
+                ],
+                Desserts: [
+                    { name: 'Chocolate Brownie', diets: [] },
+                    { name: 'Seasonal Fruit Cup', diets: [] }
+                ],
+                'Ice Cream': [
+                    { name: 'Vanilla Cup', diets: [] },
+                    { name: 'Chocolate Chip Cup', diets: [] }
+                ]
+            },
+            business: {
+                Mains: [
+                    { name: 'Grilled Salmon with Herb Butter', diets: ['gluten-free'] },
+                    { name: 'Lamb Rogan Josh', diets: ['halal'] },
+                    { name: 'Paneer Tikka Masala', diets: ['vegetarian', 'halal'] },
+                    { name: 'Chicken Tikka Wrap', diets: ['halal'] },
+                    { name: 'Mediterranean Quinoa Bowl', diets: ['vegan', 'gluten-free'] }
+                ],
+                Drinks: [
+                    { name: 'Selection of Wines &amp; Soft Drinks', diets: [] },
+                    { name: 'Fresh Juice Bar', diets: [] },
+                    { name: 'Premium Tea &amp; Coffee Selection', diets: [] },
+                    { name: 'Sparkling Water', diets: [] }
+                ],
+                Desserts: [
+                    { name: 'Tiramisu', diets: [] },
+                    { name: 'Fresh Berry Tart', diets: [] }
+                ],
+                'Ice Cream': [
+                    { name: 'Artisanal Ice Cream Trio', diets: [] },
+                    { name: 'Belgian Chocolate Cup', diets: [] }
+                ]
+            },
+            first: {
+                Mains: [
+                    { name: 'Surf &amp; Turf &mdash; Lobster &amp; Beef Tenderloin', diets: ['gluten-free'] },
+                    { name: "Chef's Tasting Menu (Halal available)", diets: ['halal'] },
+                    { name: 'Truffle Mushroom Risotto', diets: ['vegetarian'] },
+                    { name: 'Wagyu Beef Tenderloin', diets: ['halal', 'gluten-free'] },
+                    { name: 'Seasonal Vegan Tasting Plate', diets: ['vegan', 'gluten-free'] }
+                ],
+                Drinks: [
+                    { name: 'Premium Champagne &amp; Spirits Selection', diets: [] },
+                    { name: 'Handcrafted Mocktails', diets: [] },
+                    { name: 'Barista-Made Coffee &amp; Fine Teas', diets: [] },
+                    { name: 'Fine Wine Pairing', diets: [] }
+                ],
+                Desserts: [
+                    { name: 'Chocolate Souffl&eacute;', diets: [] },
+                    { name: 'Seasonal Fruit &amp; Cheese Board', diets: [] }
+                ],
+                'Ice Cream': [
+                    { name: 'Premium Ice Cream Sundae Bar', diets: [] },
+                    { name: 'Pistachio &amp; Saffron Cup', diets: [] }
+                ]
+            }
+        };
+
+        let currentCabin = 'economy';
+        let currentMealFilter = 'all';
+
+        function selectCabin(cls) {
+            currentCabin = cls;
+            document.querySelectorAll('#cabinTabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cabin === cls);
+            });
+
+            const data = cabinData[cls];
+            document.getElementById('cabinPhoto').src = data.photo;
+            document.getElementById('cabinPhoto').alt = data.label + ' cabin interior';
+            document.getElementById('cabinCaption').innerHTML = data.caption;
+            document.getElementById('cabinTitle').textContent = data.label;
+
+            const specsHTML = data.specs.map(([label, value]) =>
+                `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-value">${value}</span></div>`
+            ).join('');
+            document.getElementById('cabinSpecs').innerHTML = specsHTML;
+
+            document.getElementById('cabinAmenities').innerHTML = data.amenities.map(a => `<li>${a}</li>`).join('');
+
+            document.getElementById('wifiTierName').innerHTML = data.wifiName;
+            document.getElementById('wifiTierDesc').textContent = data.wifiDesc;
+
+            document.getElementById('pitchResult').textContent = '';
+            renderMeals();
+        }
+
+        function renderMeals() {
+            const categories = mealData[currentCabin];
+            const listEl = document.getElementById('mealList');
+            let html = '';
+            Object.keys(categories).forEach(category => {
+                const items = categories[category];
+                const visibleItems = currentMealFilter === 'all'
+                    ? items
+                    : items.filter(meal => meal.diets.includes(currentMealFilter));
+                const columnHidden = visibleItems.length === 0 ? ' hidden-column' : '';
+
+                html += `<div class="meal-column${columnHidden}">`;
+                html += `<div class="meal-category-title">${category}</div>`;
+                items.forEach(meal => {
+                    const tagsLabel = meal.diets.map(d => d.replace('-', ' ')).join(' &middot; ');
+                    const tagsHTML = tagsLabel ? `<div class="meal-tags">${tagsLabel}</div>` : '';
+                    const hidden = (currentMealFilter !== 'all' && !meal.diets.includes(currentMealFilter)) ? ' hidden-meal' : '';
+                    html += `<div class="meal-item${hidden}">
+                        <div class="meal-name">${meal.name}</div>
+                        ${tagsHTML}
+                    </div>`;
+                });
+                html += `</div>`;
+            });
+            listEl.innerHTML = html;
+        }
+
+        function filterMeals(diet) {
+            currentMealFilter = diet;
+            document.querySelectorAll('#mealFilters .diet-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.diet === diet);
+            });
+            renderMeals();
+        }
+
+        function calculatePitch() {
+            const input = document.getElementById('heightInput');
+            const resultEl = document.getElementById('pitchResult');
+            const height = parseFloat(input.value);
+            if (!height || height < 120 || height > 230) {
+                resultEl.style.color = '#ffdf70';
+                resultEl.textContent = 'Enter your height in cm (between 120 and 230) to check your fit.';
+                return;
+            }
+            const data = cabinData[currentCabin];
+            if (height <= data.pitchComfortable) {
+                resultEl.style.color = '#7CFFB2';
+                resultEl.innerHTML = `Comfortable fit in ${data.label} at ${height}cm &mdash; plenty of legroom.`;
+            } else if (height <= data.pitchSnug) {
+                resultEl.style.color = '#ffe066';
+                resultEl.innerHTML = `Snug fit in ${data.label} at ${height}cm &mdash; workable, but you may want to stretch on longer flights.`;
+            } else {
+                resultEl.style.color = '#ff9d9d';
+                resultEl.innerHTML = `Tight fit in ${data.label} at ${height}cm &mdash; consider a higher class or an aisle/exit-row seat for extra room.`;
+            }
+        }
+
+        /* ===================== COCKPIT VIEW ===================== */
+        const cockpitImages = {
+            deck: { src: 'cockpit.jpg', alt: 'Flight Deck' },
+            panel: { src: 'control panel.jpg', alt: 'Cockpit control panel close-up' },
+            window: { src: 'window view.jpg', alt: 'View from the cockpit window above the clouds' }
+        };
+
+        function selectCockpitImage(key) {
+            document.querySelectorAll('#cockpitTabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cockpit === key);
+            });
+            const data = cockpitImages[key];
+            const img = document.getElementById('cockpitPhoto');
+            img.src = data.src;
+            img.alt = data.alt;
+        }
+
+        /* ===================== ONBOARD LOUNGES ===================== */
+        const loungeImages = {
+            seating: { src: 'lounge.jpg', alt: 'Lounge Seating' },
+            bar: { src: 'onboard bar.jpg', alt: 'Lounge bar and refreshments area' },
+            window: { src: 'lounge seating.jpg', alt: 'Lounge seating with a window view of the tarmac' }
+        };
+
+        function selectLoungeImage(key) {
+            document.querySelectorAll('#loungeTabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lounge === key);
+            });
+            const data = loungeImages[key];
+            const img = document.getElementById('loungePhoto');
+            img.src = data.src;
+            img.alt = data.alt;
+        }
+
+        /* ===================== FLEET TOUR ===================== */
+        const fleetData = {
+            a320: {
+                title: 'Airbus A320',
+                photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg/330px-Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg',
+                specs: [
+                    ['Seats', '180'],
+                    ['Speed', '840 km/h'],
+                    ['Range', '6,150 km'],
+                    ['Used For', 'Domestic &amp; International Flights']
+                ],
+                note: '180 seats across a two-class Economy and Business layout &mdash; our regional and international workhorse.'
+            },
+            b737: {
+                title: 'Boeing 737',
+                photo: 'https://cdn.aeroreport.de/media/pages/good-to-know/boeing-737-wie-ein-einfacher-jet-die-luftfahrt-revolutionierte/kopf/cc3852e288-1752817403/adobestock_609501338_1200px-2000x.webp',
+                specs: [
+                    ['Seats', '189'],
+                    ['Speed', '839 km/h'],
+                    ['Range', '6,570 km'],
+                    ['Used For', 'International Flights']
+                ],
+                note: '189 seats configured for high-frequency international service across Economy and Business cabins.'
+            },
+            a319: {
+                title: 'Airbus A319',
+                photo: 'https://privatejetcharter.com/wp-content/uploads/2018/01/A319-CJ-768x558.jpg',
+                specs: [
+                    ['Seats', '144'],
+                    ['Speed', '830 km/h'],
+                    ['Range', '6,850 km'],
+                    ['Used For', 'Domestic Flights']
+                ],
+                note: '144 seats in an all-Economy layout, tailored for quick, efficient domestic routes.'
+            },
+            a321: {
+                title: 'Airbus A321',
+                photo: 'https://aircharterservice-globalcontent-live.cphostaccess.com/images/aircraft-guide-images/group/airbus-a321-large_tcm36-3646.jpg',
+                specs: [
+                    ['Seats', '220'],
+                    ['Speed', '840 km/h'],
+                    ['Range', '5,930 km'],
+                    ['Used For', 'Domestic &amp; International Flights']
+                ],
+                note: '220 seats across Economy, Business, and First &mdash; our highest-capacity narrow-body for busy trunk routes.'
+            },
+            b777: {
+                title: 'Boeing 777',
+                photo: 'https://cdn.prod.website-files.com/6703f7dfd15367738df51db0/69e3b6df7a459af9d9246135_file_nzcon07h.png',
+                specs: [
+                    ['Seats', '396'],
+                    ['Speed', '905 km/h'],
+                    ['Range', '15,840 km'],
+                    ['Used For', 'Long-Haul International Flights']
+                ],
+                note: '396 seats across Economy, Business, and First &mdash; our flagship long-haul jet, with the full three-cabin experience, an onboard First Class lounge, and lie-flat suites.'
+            }
+        };
+
+        function selectPlane(key) {
+            document.querySelectorAll('#fleetTabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.plane === key);
+            });
+            const data = fleetData[key];
+            document.getElementById('fleetPhoto').src = data.photo;
+            document.getElementById('fleetPhoto').alt = data.title + ' exterior';
+            document.getElementById('fleetTitle').textContent = data.title;
+            document.getElementById('fleetSpecs').innerHTML = data.specs.map(([label, value]) =>
+                `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-value">${value}</span></div>`
+            ).join('');
+            document.getElementById('fleetConfigNote').innerHTML = data.note;
+        }
+
+        /* Initial render */
+        renderMeals();
+    </script>
+</body>
+
+</html>

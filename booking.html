@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shaheen Airlines - Schedule & Book Tickets</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --dark-blue: #03366d;
+      --golden: #f4c542;
+    }
+    body {
+      font-family: 'Times New Roman';
+      font-size: 18px;
+      margin: 0;
+      padding: 0;
+      background-image: url("booking\ background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: var(--dark-blue);
+      text-align: center;
+    }
+    
+    /* Enhanced Header with modern deep shadow and clean underline */
+    h1 {
+      background-color: var(--golden);
+      color: var(--dark-blue);
+      padding: 25px;
+      margin: 0;
+      font-size: 38px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border-bottom: 4px solid var(--dark-blue);
+      position: relative;
+      overflow: hidden;
+      transition: letter-spacing 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+    }
+
+    /* Diagonal light sweep, hidden until hover */
+    h1::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.9s ease;
+      pointer-events: none;
+    }
+
+    h1:hover {
+      background-color: #ffdf70;
+      letter-spacing: 2px;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4), 0 0 25px rgba(244, 197, 66, 0.5);
+    }
+
+    h1:hover::before {
+      left: 130%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      h1, h1::before {
+        transition: none;
+      }
+    }
+    
+    /* Interactive, semi-transparent sections for premium glassmorphism touch */
+    .section {
+      background-color: rgba(255, 255, 255, 0.95);
+      margin: 40px auto;
+      width: 90%;
+      max-width: 850px;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      color: var(--dark-blue);
+      border: 1px solid rgba(3, 54, 109, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid rgba(3, 54, 109, 0.2);
+    }
+    th {
+      background-color: var(--golden);
+      font-weight: bold;
+    }
+    
+    /* Subtle hover indicator over schedule rows */
+    tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    tbody tr:hover {
+      background-color: rgba(244, 197, 66, 0.15);
+    }
+    
+    .section h2 {
+      color: var(--dark-blue);
+      margin-top: 0;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 25%;
+      width: 50%;
+      height: 2px;
+      background-color: var(--golden);
+    }
+    
+    /* Clean interactive Form elements */
+    .section form input, .section form select {
+      width: 95%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 6px;
+      border: 1.5px solid rgba(3, 54, 109, 0.3);
+      font-size: 16px;
+      background-color: #ffffff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .section form input:focus, .section form select:focus {
+      border-color: var(--dark-blue);
+      box-shadow: 0 0 8px rgba(3, 54, 109, 0.2);
+      background-color: #ffffff;
+    }
+    
+    .submit-btn, .pdf-btn {
+      background-color: var(--golden);
+      color: var(--dark-blue);
+      font-weight: bold;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px 0 5px;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover, .pdf-btn:hover {
+      background-color: #ffdf70;
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .submit-btn:active, .pdf-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    
+    .contact-button, .home-button {
+      background-color: var(--golden);
+      color: var(--dark-blue);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-button {
+      float: left;
+    }
+
+    .home-button {
+      float: right;
+    }
+
+    .contact-button:hover,
+    .home-button:hover {
+      background-color: #ffdf70;
+      transform: scale(1.06);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .contact-button:active,
+    .home-button:active {
+      transform: scale(0.97);
+    }
+
+    .contact-wrapper {
+      position: relative;
+    }
+
+    .contact-info {
+      display: none;
+      position: absolute;
+      left: 20px;
+      bottom: 100%;
+      margin-bottom: 10px;
+      background-color: var(--golden);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--dark-blue);
+      color: var(--dark-blue);
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .search-box{
+    margin-bottom:25px;
+}
+
+.search-box select,
+.search-box input{
+    padding:10px;
+    margin:8px;
+    border-radius:5px;
+    border:1px solid #ccc;
+    width:180px;
+}
+
+/* ===================== SEAT SELECTION ===================== */
+.cockpit {
+  background: linear-gradient(135deg, var(--dark-blue), #0a5c9e);
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 45px 45px 10px 10px;
+  width: 55%;
+  min-width: 220px;
+  margin: 0 auto 22px auto;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  text-transform: uppercase;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.cockpit:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.5);
+}
+
+.seat-legend {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.legend-swatch.available { background: #35c463; }
+.legend-swatch.booked { background: #e5484d; }
+.legend-swatch.selected { background: var(--golden); }
+
+.seat-type-key {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: var(--dark-blue);
+  margin-bottom: 20px;
+  opacity: 0.85;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.seat-class-divider {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--dark-blue);
+  background: var(--golden);
+  padding: 6px 18px;
+  border-radius: 20px;
+  margin: 14px 0 4px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.seat-class-divider:first-child { margin-top: 0; }
+.seat-row { display: flex; gap: 7px; align-items: center; }
+.seat-row .row-label {
+  width: 18px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: var(--dark-blue);
+  text-align: center;
+}
+.seat-btn {
+  width: 52px;
+  height: 44px;
+  border-radius: 8px 8px 3px 3px;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  background: #35c463;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  padding: 0;
+}
+.seat-btn .seat-price {
+  font-size: 8px;
+  font-weight: normal;
+  opacity: 0.92;
+}
+.seat-btn.aisle-gap { margin-right: 22px; }
+.seat-btn:hover:not(.booked) {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.35);
+}
+.seat-btn.booked {
+  background: #e5484d;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+.seat-btn.selected {
+  background: var(--golden);
+  color: var(--dark-blue);
+  box-shadow: 0 0 0 2px var(--dark-blue) inset;
+}
+
+.selected-seats-box {
+  font-family: Arial, sans-serif;
+  background: rgba(244, 197, 66, 0.15);
+  border: 1.5px dashed var(--golden);
+  border-radius: 8px;
+  padding: 14px;
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 15px;
+  color: var(--dark-blue);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.selected-seats-box:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+  background: rgba(244, 197, 66, 0.25);
+}
+#selectedSeatsList { font-weight: bold; }
+
+/* ===================== WEATHER CARD ===================== */
+.weather-card {
+  display: none;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(135deg, var(--dark-blue), #06549e);
+  color: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 6px 0 16px 0;
+  max-width: 460px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  font-family: Arial, sans-serif;
+  border: 1.5px solid var(--golden);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.weather-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.4);
+  border-color: #ffe066;
+}
+.weather-icon {
+  font-size: 42px;
+  line-height: 1;
+}
+.weather-info { flex: 1; }
+.weather-city {
+  font-weight: bold;
+  font-size: 15px;
+  color: var(--golden);
+  margin-bottom: 2px;
+}
+.weather-temp {
+  font-size: 24px;
+  font-weight: bold;
+}
+.weather-desc {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.weather-card-search {
+  padding: 10px 16px;
+  margin: 8px;
+  vertical-align: middle;
+  max-width: 320px;
+}
+.weather-card-search .weather-icon { font-size: 30px; }
+.weather-card-search .weather-temp { font-size: 18px; }
+.weather-card-search .weather-city { font-size: 13px; }
+.weather-card-search .weather-desc { font-size: 11.5px; }
+
+/* ===================== SELECT WITH CLEAR BUTTON ===================== */
+.field-with-clear {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 95%;
+  margin: 12px 0;
+}
+.field-with-clear select {
+  width: 100%;
+  margin: 0;
+}
+.clear-select-btn {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--dark-blue);
+  background: #fff;
+  color: var(--dark-blue);
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.clear-select-btn:hover {
+  background: var(--dark-blue);
+  color: #fff;
+}
+  </style>
+</head>
+<body>
+
+<h1>Shaheen Airlines - Schedule & Book Tickets</h1>
+
+<div class="section">
+  <h2>Flight Schedule</h2>
+
+ <div class="search-box">
+
+      <select id="searchFrom">
+          <option value="">From (Any)</option>
+          <option>Karachi</option>
+          <option>Lahore</option>
+          <option>Islamabad</option>
+          <option>Sialkot</option>
+          <option>Dubai</option>
+          <option>Muscat</option>
+          <option>Jeddah</option>
+          <option>Beijing</option>
+      </select>
+
+      <select id="searchTo">
+          <option value="">To (Any)</option>
+          <option>Karachi</option>
+          <option>Lahore</option>
+          <option>Islamabad</option>
+          <option>Sialkot</option>
+          <option>Dubai</option>
+          <option>Muscat</option>
+          <option>Jeddah</option>
+          <option>Beijing</option>
+      </select>
+
+      <button class="pdf-btn" onclick="searchFlights()">
+          Search Flights
+      </button>
+
+      <div class="weather-card weather-card-search" id="searchWeatherCard">
+        <div class="weather-icon" id="searchWeatherIcon">&#127780;</div>
+        <div class="weather-info">
+          <div class="weather-city" id="searchWeatherCity">&mdash;</div>
+          <div class="weather-temp" id="searchWeatherTemp">&mdash;</div>
+          <div class="weather-desc" id="searchWeatherDesc">Destination weather</div>
+        </div>
+      </div>
+
+  </div>
+
+  <table>
+  <thead>
+    <tr>
+      <th>Flight</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Departure</th>
+      <th>Arrival</th>
+      <th>Price (PKR)</th>
+    </tr>
+  </thead>
+    <tbody id="schedule-body">
+      </tbody>
+  </table>
+  <br>
+  <button class="pdf-btn" onclick="toggleSchedule()" id="toggle-btn">View Full Schedule</button>
+  <button class="pdf-btn" onclick="downloadSchedule()">Download Schedule (PDF)</button>
+</div>
+
+<div class="section" id="seatSection">
+  <h2>Select Your Seat</h2>
+
+  <div class="seat-legend">
+    <span class="legend-item"><span class="legend-swatch available"></span> Available</span>
+    <span class="legend-item"><span class="legend-swatch booked"></span> Booked</span>
+    <span class="legend-item"><span class="legend-swatch selected"></span> Selected</span>
+  </div>
+
+  <div class="seat-type-key">Prices shown below are per seat, based on its class and position &mdash; window seats cost a bit more, and Business/First rows cost more than Economy.</div>
+
+  <div class="cockpit">&#9992; Cockpit</div>
+
+  <div class="seat-map" id="seatMap"></div>
+
+  <div class="selected-seats-box">
+    Seats Selected: <span id="selectedSeatsCount">0</span> &nbsp;|&nbsp;
+    Selected Seats: <span id="selectedSeatsList">None</span> &nbsp;|&nbsp;
+    Estimated Total: <span id="selectedSeatsTotal">PKR 0</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Book Your Ticket</h2>
+  <form id="booking-form" onsubmit="generateTicket(event)">
+    <input type="text" id="fullName" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email Address" required />
+    <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10,15}" />
+    <div class="field-with-clear">
+      <select id="fromCity" required>
+        <option value="" disabled selected>Select Departure City</option>
+        <option>Karachi</option>
+        <option>Lahore</option>
+        <option>Islamabad</option>
+        <option>Sialkot</option>
+        <option>Dubai</option>
+        <option>Jeddah</option>
+        <option>Muscat</option>
+        <option>Beijing</option>
+      </select>
+      <button type="button" class="clear-select-btn" onclick="clearCitySelection('fromCity')" title="Clear departure city">&times;</button>
+    </div>
+    <div class="field-with-clear">
+      <select id="toCity" required>
+        <option value="" disabled selected>Select Destination</option>
+        <option>Lahore</option>
+        <option>Karachi</option>
+        <option>Islamabad</option>
+        <option>Sialkot</option>
+        <option>Dubai</option>
+        <option>Jeddah</option>
+        <option>Muscat</option>
+        <option>Beijing</option>
+      </select>
+      <button type="button" class="clear-select-btn" onclick="clearCitySelection('toCity')" title="Clear destination">&times;</button>
+    </div>
+
+    <div class="weather-card" id="weatherCard">
+      <div class="weather-icon" id="weatherIcon">&#127780;</div>
+      <div class="weather-info">
+        <div class="weather-city" id="weatherCity">&mdash;</div>
+        <div class="weather-temp" id="weatherTemp">&mdash;</div>
+        <div class="weather-desc" id="weatherDesc">Destination weather</div>
+      </div>
+    </div>
+
+    <input type="date" id="date" required />
+    <input type="number" id="seats" placeholder="Number of Seats" min="1" max="50" required readonly title="Auto-filled based on the seats you select above" />
+    <small style="display:block; margin-top:-6px; margin-bottom:10px; color: var(--dark-blue); opacity:0.75;">Auto-filled based on the seats you select above &uarr;</small>
+    <button type="submit" class="submit-btn">Book Now</button>
+  </form>
+</div>
+
+<div class="contact-wrapper">
+  <div class="contact-info" id="contact-info">
+    <strong>Email:</strong> shaheenairlines@gmail.com<br>
+    <strong>Phone:</strong> 0327-9736400
+  </div>
+
+  <div style="clear: both;"></div>
+  <div>
+    <button class="contact-button" onclick="toggleContact()">
+        Contact Us
+    </button>
+
+    <a href="about.html">
+        <button class="home-button" style="margin-right:10px;">
+            About Us
+        </button>
+    </a>
+
+    <a href="index.html">
+        <button class="home-button" style="margin-right:10px;">
+            Home
+        </button>
+    </a>
+
+    <a href="experience.html">
+        <button class="home-button" style="margin-right:10px;">
+            In-Flight Experience
+        </button>
+    </a>
+</div>
+
+<script>
+  const allFlights = [
+    ["PK201","Karachi","Lahore","08:00","10:00","32000"],
+    ["PK202","Lahore","Karachi","11:00","13:00","32000"],
+    ["PK203","Karachi","Islamabad","14:00","16:00","36000"],
+    ["PK204","Islamabad","Karachi","18:00","20:00","36000"],
+    ["PK205","Islamabad","Dubai","09:00","12:00","100000"],
+    ["PK206","Dubai","Islamabad","13:00","16:00","100000"],
+    ["PK207","Lahore","Jeddah","15:00","19:00","128000"],
+    ["PK208","Lahore","Dubai","17:00","20:00","96000"],
+    ["PK209","Dubai","Lahore","08:00","11:00","96000"],
+    ["PK210","Islamabad","Muscat","06:00","09:00","88000"],
+    ["PK211","Muscat","Islamabad","10:00","13:00","88000"],
+    ["PK212","Karachi","Muscat","05:00","08:00","84000"],
+    ["PK213","Muscat","Karachi","09:00","12:00","84000"],
+    ["PK214","Dubai","Karachi","14:00","17:00","92000"],
+    ["PK215","Karachi","Dubai","19:00","22:00","92000"],
+    ["PK216","Lahore","Islamabad","07:00","08:00","34000"],
+    ["PK217","Islamabad","Lahore","09:00","10:00","34000"],
+    ["PK218","Dubai","Muscat","11:00","12:00","48000"],
+    ["PK219","Muscat","Dubai","13:00","14:00","48000"],
+    ["PK220","Karachi","Jeddah","03:00","06:00","120000"],
+    ["PK221","Jeddah","Karachi","07:00","10:00","120000"],
+    ["PK222","Islamabad","Jeddah","12:00","15:00","124000"],
+    ["PK223","Jeddah","Islamabad","16:00","19:00","124000"],
+    ["PK224","Lahore","Muscat","05:00","08:00","86000"],
+    ["PK225","Muscat","Lahore","09:00","12:00","86000"],
+    ["PK226","Sialkot","Karachi","06:00","08:00","38000"],
+    ["PK227","Karachi","Sialkot","09:00","11:00","38000"],
+    ["PK228","Sialkot","Lahore","07:00","07:45","24000"],
+    ["PK229","Lahore","Sialkot","08:30","09:15","24000"],
+    ["PK230","Sialkot","Islamabad","10:00","11:00","26000"],
+    ["PK231","Islamabad","Sialkot","12:00","13:00","26000"],
+    ["PK232","Sialkot","Dubai","14:00","17:00","94000"],
+    ["PK233","Dubai","Sialkot","18:00","21:00","94000"],
+    ["PK234","Sialkot","Muscat","06:30","09:30","86000"],
+    ["PK235","Muscat","Sialkot","10:30","13:30","86000"],
+    ["PK236","Sialkot","Jeddah","04:00","07:30","122000"],
+    ["PK237","Jeddah","Sialkot","08:30","12:00","122000"],
+    ["PK238","Karachi","Beijing","01:00","09:00","156000"],
+    ["PK239","Beijing","Karachi","11:00","19:00","156000"],
+    ["PK240","Lahore","Beijing","02:00","10:00","152000"],
+    ["PK241","Beijing","Lahore","12:00","20:00","152000"],
+    ["PK242","Islamabad","Beijing","03:00","11:00","150000"],
+    ["PK243","Beijing","Islamabad","13:00","21:00","150000"],
+    ["PK244","Sialkot","Beijing","04:00","12:00","154000"],
+    ["PK245","Beijing","Sialkot","14:00","22:00","154000"],
+    ["PK246","Dubai","Beijing","05:00","13:00","140000"],
+    ["PK247","Beijing","Dubai","15:00","23:00","140000"],
+    ["PK248","Muscat","Beijing","06:00","14:00","144000"],
+    ["PK249","Beijing","Muscat","16:00","00:00","144000"],
+    ["PK250","Jeddah","Beijing","07:00","15:00","164000"],
+    ["PK251","Beijing","Jeddah","17:00","01:00","164000"],
+    ["PK252","Dubai","Jeddah","07:00","09:00","66000"],
+    ["PK253","Jeddah","Dubai","10:00","12:00","66000"],
+    ["PK254","Jeddah","Lahore","20:00","00:00","128000"],
+    ["PK255","Muscat","Jeddah","06:00","08:30","62000"],
+    ["PK256","Jeddah","Muscat","09:30","12:00","62000"]
+];
+
+  /* ===================== TIME HELPERS ===================== */
+  function formatTime12(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':').map(Number);
+    const period = h >= 12 ? 'PM' : 'AM';
+    let hour12 = h % 12;
+    if (hour12 === 0) hour12 = 12;
+    return `${String(hour12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${period}`;
+  }
+
+  function calcDuration(dep, arr) {
+    if (!dep || !arr) return '';
+    const [dh, dm] = dep.split(':').map(Number);
+    const [ah, am] = arr.split(':').map(Number);
+    let diff = (ah * 60 + am) - (dh * 60 + dm);
+    if (diff < 0) diff += 24 * 60;
+    const hours = Math.floor(diff / 60);
+    const minutes = diff % 60;
+    return `${hours}h ${String(minutes).padStart(2, '0')}m`;
+  }
+
+
+  /* ===================== FARE MODEL ===================== */
+  // Base fares below are Economy-class, per seat, for the route currently
+  // selected in the "From"/"To" dropdowns. Business and First multiply the
+  // Economy base fare; within any class, Window seats cost more than
+  // Middle/Aisle seats. Both the seat map AND the PDF ticket call
+  // getSeatPrice() so they can never show two different numbers for the
+  // same seat.
+  const routeBaseFares = {
+    'Karachi-Lahore': 32000, 'Lahore-Karachi': 32000,
+    'Karachi-Islamabad': 36000, 'Islamabad-Karachi': 36000,
+    'Islamabad-Dubai': 100000, 'Dubai-Islamabad': 100000,
+    'Lahore-Jeddah': 128000, 'Lahore-Dubai': 96000,
+    'Dubai-Lahore': 96000, 'Islamabad-Muscat': 88000,
+    'Muscat-Islamabad': 88000, 'Karachi-Muscat': 84000,
+    'Muscat-Karachi': 84000, 'Dubai-Karachi': 92000,
+    'Karachi-Dubai': 92000, 'Lahore-Islamabad': 34000,
+    'Islamabad-Lahore': 34000, 'Dubai-Muscat': 48000,
+    'Muscat-Dubai': 48000, 'Karachi-Jeddah': 120000,
+    'Jeddah-Karachi': 120000, 'Islamabad-Jeddah': 124000,
+    'Jeddah-Islamabad': 124000, 'Lahore-Muscat': 86000,
+    'Muscat-Lahore': 86000,
+    'Sialkot-Karachi': 38000, 'Karachi-Sialkot': 38000,
+    'Sialkot-Lahore': 24000, 'Lahore-Sialkot': 24000,
+    'Sialkot-Islamabad': 26000, 'Islamabad-Sialkot': 26000,
+    'Sialkot-Dubai': 94000, 'Dubai-Sialkot': 94000,
+    'Sialkot-Muscat': 86000, 'Muscat-Sialkot': 86000,
+    'Sialkot-Jeddah': 122000, 'Jeddah-Sialkot': 122000,
+    'Karachi-Beijing': 156000, 'Beijing-Karachi': 156000,
+    'Lahore-Beijing': 152000, 'Beijing-Lahore': 152000,
+    'Islamabad-Beijing': 150000, 'Beijing-Islamabad': 150000,
+    'Sialkot-Beijing': 154000, 'Beijing-Sialkot': 154000,
+    'Dubai-Beijing': 140000, 'Beijing-Dubai': 140000,
+    'Muscat-Beijing': 144000, 'Beijing-Muscat': 144000,
+    'Jeddah-Beijing': 164000, 'Beijing-Jeddah': 164000,
+    'Dubai-Jeddah': 66000, 'Jeddah-Dubai': 66000,
+    'Jeddah-Lahore': 128000,
+    'Muscat-Jeddah': 62000, 'Jeddah-Muscat': 62000
+  };
+
+  const classMultipliers = { 'Economy': 1, 'Business': 1.5, 'First': 2.2 };
+  // Window seats (columns 1 & 9) cost the most; Middle/Aisle are the base rate.
+  const seatPositionMultipliers = { 'Window': 1.15, 'Middle': 1, 'Aisle': 1 };
+
+  function getRouteBaseFare() {
+    const from = document.getElementById('fromCity').value;
+    const to = document.getElementById('toCity').value;
+    return routeBaseFares[`${from}-${to}`] || 0;
+  }
+
+  // Rounds to the nearest 10 so fares stay clean numbers after multipliers.
+  // Class now comes from the seat's own row (see rowClassBlocks) rather
+  // than a global toggle, since one seat map spans all three classes.
+  function getSeatPrice(seatId) {
+    const row = seatId[0];
+    const col = parseInt(seatId.slice(1), 10);
+    const cls = classForRow(row);
+    const base = getRouteBaseFare();
+    const raw = base * classMultipliers[cls] * seatPositionMultipliers[seatTypeLabel(col)];
+    return Math.round(raw / 10) * 10;
+  }
+
+  // Re-price the map whenever the route changes, since fares are per-route.
+  document.getElementById('fromCity').addEventListener('change', () => { renderSeatMap(); updateSelectedSeatsUI(); });
+  document.getElementById('toCity').addEventListener('change', () => { renderSeatMap(); updateSelectedSeatsUI(); });
+
+  /* ===================== SEAT SELECTION LOGIC ===================== */
+  // 15 rows total, split evenly into three 5-row blocks: Economy (A-E),
+  // Business (F-J), First (K-O). Each seat's class comes from its row, so
+  // this is one continuous seating plan instead of a class toggle.
+  const seatRows = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O'];
+  const rowClassBlocks = [
+    { rows: ['A','B','C','D','E'], cls: 'Economy' },
+    { rows: ['F','G','H','I','J'], cls: 'Business' },
+    { rows: ['K','L','M','N','O'], cls: 'First' }
+  ];
+  function classForRow(r) {
+    const block = rowClassBlocks.find(b => b.rows.includes(r));
+    return block ? block.cls : 'Economy';
+  }
+  const bookedSeats = ['A2','C4','E1','F6','H2','I4','J5'];
+  let selectedSeats = [];
+
+  function seatTypeLabel(col) {
+    if (col === 1 || col === 9) return 'Window';
+    if (col === 2 || col === 5 || col === 8) return 'Middle';
+    return 'Aisle';
+  }
+
+  function renderSeatMap() {
+    const map = document.getElementById('seatMap');
+    map.innerHTML = '';
+    let lastCls = null;
+    seatRows.forEach(r => {
+      const cls = classForRow(r);
+      // Insert a divider with the class name the first time each of the
+      // three blocks starts, so the single plan still reads as "Economy,
+      // then Business, then First" top to bottom.
+      if (cls !== lastCls) {
+        const divider = document.createElement('div');
+        divider.className = 'seat-class-divider';
+        divider.textContent = `${cls} Class`;
+        map.appendChild(divider);
+        lastCls = cls;
+      }
+
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'seat-row';
+
+      const label = document.createElement('div');
+      label.className = 'row-label';
+      label.textContent = r;
+      rowDiv.appendChild(label);
+
+      for (let c = 1; c <= 9; c++) {
+        const seatId = `${r}${c}`;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'seat-btn';
+        const price = getSeatPrice(seatId);
+        btn.innerHTML = `${seatId}<span class="seat-price">PKR ${price.toLocaleString()}</span>`;
+        btn.title = `${seatId} - ${seatTypeLabel(c)} seat - ${cls} Class - PKR ${price.toLocaleString()}`;
+        if (c === 3 || c === 6) btn.classList.add('aisle-gap');
+
+        if (bookedSeats.includes(seatId)) {
+          btn.classList.add('booked');
+          btn.disabled = true;
+        } else if (selectedSeats.includes(seatId)) {
+          btn.classList.add('selected');
+        }
+
+        btn.addEventListener('click', () => toggleSeat(seatId));
+        rowDiv.appendChild(btn);
+      }
+      map.appendChild(rowDiv);
+    });
+  }
+
+  function toggleSeat(seatId) {
+    if (selectedSeats.includes(seatId)) {
+      selectedSeats = selectedSeats.filter(s => s !== seatId);
+    } else {
+      selectedSeats.push(seatId);
+    }
+    // Keep "Number of Seats" in sync automatically with the seat map
+    document.getElementById('seats').value = selectedSeats.length || '';
+    updateSelectedSeatsUI();
+    renderSeatMap();
+  }
+
+  function updateSelectedSeatsUI() {
+    const listEl = document.getElementById('selectedSeatsList');
+    const countEl = document.getElementById('selectedSeatsCount');
+    const totalEl = document.getElementById('selectedSeatsTotal');
+    countEl.textContent = selectedSeats.length;
+    listEl.textContent = selectedSeats.length
+      ? selectedSeats.slice().sort().join(', ')
+      : 'None';
+    const total = selectedSeats.reduce((sum, id) => sum + getSeatPrice(id), 0);
+    totalEl.textContent = `PKR ${total.toLocaleString()}`;
+  }
+
+  let expanded = false;
+
+  function renderSchedule(flights, limit = null) {
+
+    const tbody = document.getElementById("schedule-body");
+    tbody.innerHTML = "";
+
+    const data = limit ? flights.slice(0, limit) : flights;
+    data.forEach(flight => {
+        const row = document.createElement("tr");
+        const displayFlight = [
+    flight[0],
+    flight[1],
+    flight[2],
+    formatTime12(flight[3]),
+    formatTime12(flight[4]),
+    flight[5]
+];
+        displayFlight.forEach(cell => {
+            const td = document.createElement("td");
+            td.textContent = cell;
+            row.appendChild(td);
+        });
+        tbody.appendChild(row);
+    });
+}
+
+  function toggleSchedule() {
+    if (expanded) {
+        renderSchedule(allFlights, 5);
+        document.getElementById("toggle-btn").textContent = "View Full Schedule";
+    } else {
+        renderSchedule(allFlights);
+        document.getElementById("toggle-btn").textContent = "Show Less";
+    }
+    expanded = !expanded;
+
+}
+
+  window.onload = () => {
+    renderSchedule(allFlights,5);
+    expanded = false;
+    renderSeatMap();
+};
+
+  function searchFlights() {
+
+    const from = document.getElementById("searchFrom").value;
+    const to = document.getElementById("searchTo").value;
+
+    const results = allFlights.filter(flight => {
+
+        const fromMatch = from === "" || flight[1] === from;
+        const toMatch = to === "" || flight[2] === to;
+
+        return fromMatch && toMatch;
+
+    });
+    renderSchedule(results);
+
+    const toggleBtn = document.getElementById("toggle-btn");
+toggleBtn.textContent = "Clear Search";
+toggleBtn.onclick = clearSearch;
+}
+
+function clearSearch() {
+
+    document.getElementById("searchFrom").value = "";
+    document.getElementById("searchTo").value = "";
+    document.getElementById("searchWeatherCard").style.display = "none";
+
+    renderSchedule(allFlights, 5);
+
+    expanded = false;
+
+    const toggleBtn = document.getElementById("toggle-btn");
+    toggleBtn.textContent = "View Full Schedule";
+    toggleBtn.onclick = toggleSchedule;
+
+}
+
+function resetSearch() {
+
+    document.getElementById("searchFrom").value = "";
+    document.getElementById("searchTo").value = "";
+    document.getElementById("searchWeatherCard").style.display = "none";
+
+    renderSchedule(allFlights,5);
+
+    expanded = false;
+
+    document.getElementById("toggle-btn").textContent = "View Full Schedule";
+    document.getElementById("toggle-btn").style.display = "inline-block";
+}
+
+  function toggleContact() {
+    const contact = document.getElementById("contact-info");
+    contact.style.display = (contact.style.display === "block") ? "none" : "block";
+  }
+
+  document.getElementById("fromCity").addEventListener("change", function () {
+    const from = this.value;
+    const toSelect = document.getElementById("toCity");
+    Array.from(toSelect.options).forEach(opt => {
+      opt.disabled = opt.value === from;
+    });
+  });
+
+  function clearCitySelection(fieldId) {
+    const field = document.getElementById(fieldId);
+    field.value = '';
+
+    if (fieldId === 'fromCity') {
+      // Re-enable all destination options since no departure city is selected
+      const toSelect = document.getElementById('toCity');
+      Array.from(toSelect.options).forEach(opt => { opt.disabled = false; });
+    }
+
+    if (fieldId === 'toCity') {
+      document.getElementById('weatherCard').style.display = 'none';
+    }
+  }
+
+  /* ===================== DESTINATION WEATHER ===================== */
+  const cityCoords = {
+    Karachi:   { lat: 24.8607, lon: 67.0011 },
+    Lahore:    { lat: 31.5497, lon: 74.3436 },
+    Islamabad: { lat: 33.6844, lon: 73.0479 },
+    Sialkot:   { lat: 32.4945, lon: 74.5229 },
+    Dubai:     { lat: 25.2048, lon: 55.2708 },
+    Muscat:    { lat: 23.5880, lon: 58.3829 },
+    Jeddah:    { lat: 21.4858, lon: 39.1925 },
+    Beijing:   { lat: 39.9042, lon: 116.4074 }
+  };
+
+  const weatherCodeMap = {
+    0:  { desc: 'Clear sky',            icon: '☀️' },
+    1:  { desc: 'Mainly clear',         icon: '🌤️' },
+    2:  { desc: 'Partly cloudy',        icon: '⛅' },
+    3:  { desc: 'Overcast',             icon: '☁️' },
+    45: { desc: 'Fog',                  icon: '🌫️' },
+    48: { desc: 'Depositing rime fog',  icon: '🌫️' },
+    51: { desc: 'Light drizzle',        icon: '🌦️' },
+    53: { desc: 'Moderate drizzle',     icon: '🌦️' },
+    55: { desc: 'Dense drizzle',        icon: '🌧️' },
+    61: { desc: 'Slight rain',          icon: '🌧️' },
+    63: { desc: 'Moderate rain',        icon: '🌧️' },
+    65: { desc: 'Heavy rain',           icon: '🌧️' },
+    71: { desc: 'Slight snow fall',     icon: '🌨️' },
+    73: { desc: 'Moderate snow fall',   icon: '🌨️' },
+    75: { desc: 'Heavy snow fall',      icon: '❄️' },
+    80: { desc: 'Rain showers',         icon: '🌦️' },
+    81: { desc: 'Moderate showers',     icon: '🌧️' },
+    82: { desc: 'Violent showers',      icon: '⛈️' },
+    95: { desc: 'Thunderstorm',         icon: '⛈️' },
+    96: { desc: 'Thunderstorm & hail',  icon: '⛈️' },
+    99: { desc: 'Severe thunderstorm',  icon: '⛈️' }
+  };
+
+  async function fetchDestinationWeather(city, idPrefix) {
+    const card = document.getElementById(idPrefix + 'Card');
+    const coords = cityCoords[city];
+    if (!coords) { card.style.display = 'none'; return; }
+
+    card.style.display = idPrefix === 'searchWeather' ? 'inline-flex' : 'flex';
+    document.getElementById(idPrefix + 'City').textContent = city;
+    document.getElementById(idPrefix + 'Temp').textContent = 'Loading…';
+    document.getElementById(idPrefix + 'Desc').textContent = 'Fetching current weather';
+    document.getElementById(idPrefix + 'Icon').textContent = '🌐';
+
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const cw = data.current_weather;
+      const info = weatherCodeMap[cw.weathercode] || { desc: 'Weather update', icon: '🌍' };
+
+      document.getElementById(idPrefix + 'Icon').textContent = info.icon;
+      document.getElementById(idPrefix + 'Temp').textContent = `${Math.round(cw.temperature)}°C`;
+      document.getElementById(idPrefix + 'Desc').textContent = `${info.desc} • Wind ${Math.round(cw.windspeed)} km/h in ${city}`;
+    } catch (err) {
+      document.getElementById(idPrefix + 'Icon').textContent = '⚠️';
+      document.getElementById(idPrefix + 'Temp').textContent = 'Unavailable';
+      document.getElementById(idPrefix + 'Desc').textContent = 'Could not load live weather right now.';
+    }
+  }
+
+  // Booking-form destination weather (independent of the search box)
+  document.getElementById('toCity').addEventListener('change', function () {
+    if (this.value) {
+      fetchDestinationWeather(this.value, 'weather');
+    } else {
+      document.getElementById('weatherCard').style.display = 'none';
+    }
+  });
+
+  // Flight-search destination weather (independent of the booking form)
+  document.getElementById('searchTo').addEventListener('change', function () {
+    if (this.value) {
+      fetchDestinationWeather(this.value, 'searchWeather');
+    } else {
+      document.getElementById('searchWeatherCard').style.display = 'none';
+    }
+  });
+
+  async function generateTicket(event) {
+    event.preventDefault();
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = document.getElementById("fullName").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const from = document.getElementById("fromCity").value;
+    const to = document.getElementById("toCity").value;
+    const date = document.getElementById("date").value;
+    const formattedDate = new Date(date).toDateString();
+
+    if (selectedSeats.length === 0) {
+      alert("Please select your seat(s) on the seat map before booking.");
+      return;
+    }
+    const seats = selectedSeats.length;
+    const seatList = selectedSeats.slice().sort().join(', ');
+
+    // Price every selected seat individually (class + window/middle/aisle),
+    // using the exact same fare function the seat map used when the
+    // person was picking seats, so the ticket can never show a different
+    // total than what they saw on screen.
+    const seatPrices = selectedSeats.map(id => getSeatPrice(id));
+    const totalPrice = seatPrices.reduce((a, b) => a + b, 0);
+    const minSeatPrice = Math.min(...seatPrices);
+    const maxSeatPrice = Math.max(...seatPrices);
+    const priceRangeLabel = minSeatPrice === maxSeatPrice
+      ? `PKR ${minSeatPrice.toLocaleString()} / seat`
+      : `PKR ${minSeatPrice.toLocaleString()} - ${maxSeatPrice.toLocaleString()} / seat`;
+
+    // The seat map now spans all three classes at once, so a booking can
+    // mix rows from more than one block. Collect every distinct class
+    // among the seats actually picked, in Economy/Business/First order,
+    // so the ticket shows exactly what was booked.
+    const classOrder = ['Economy', 'Business', 'First'];
+    const selectedClasses = classOrder.filter(cls =>
+      selectedSeats.some(id => classForRow(id[0]) === cls)
+    );
+    const ticketClassLabel = selectedClasses.length > 1
+      ? selectedClasses.join(' + ')
+      : selectedClasses[0];
+
+    const matchedFlight = allFlights.find(f => f[1] === from && f[2] === to);
+    const depTime = matchedFlight ? formatTime12(matchedFlight[3]) : 'N/A';
+    const arrTime = matchedFlight ? formatTime12(matchedFlight[4]) : 'N/A';
+    const flightDuration = matchedFlight ? calcDuration(matchedFlight[3], matchedFlight[4]) : 'N/A';
+
+    // ================= ROYAL PALETTE =================
+    const navy      = [10, 22, 46];
+    const navyDeep  = [5, 12, 28];
+    const gold      = [212, 175, 55];
+    const goldSoft  = [244, 220, 150];
+    const cream     = [252, 248, 238];
+    const ivory     = [255, 253, 246];
+    const slate     = [110, 118, 135];
+
+    // ---- Pre-measure seat list wrapping so the whole card can size itself
+    // around it. This is what stops seats overlapping the fields below when
+    // many seats are selected - nothing is drawn until we know how tall the
+    // seat block will actually be.
+    const rawPageW = doc.internal.pageSize.getWidth();
+    const rawPageH = doc.internal.pageSize.getHeight();
+    const cardXPre = 18, cardWPre = rawPageW - 36;
+    const seatBlockW = cardWPre - 28; // full width inside card minus side padding
+    // Scale font down as seat count grows so more seats fit per line
+    const seatFontSize = seats > 24 ? 8.5 : seats > 12 ? 9.5 : 11.5;
+    doc.setFont('times', 'bold');
+    doc.setFontSize(seatFontSize);
+    const seatLines = doc.splitTextToSize(seatList, seatBlockW);
+    const seatLineH = seatFontSize * 0.42; // mm per line at this font size
+    const seatBlockH = seatLines.length * seatLineH;
+    // Extra vertical room needed beyond the original single-line allowance
+    const extraSeatH = Math.max(0, seatBlockH - seatLineH);
+
+    const pageW = rawPageW;
+    const pageH = rawPageH + extraSeatH;
+    doc.internal.pageSize.height = pageH;
+    if (typeof doc.internal.pageSize.setHeight === 'function') {
+      doc.internal.pageSize.setHeight(pageH);
+    }
+
+    // ---- Full bleed backdrop ----
+    doc.setFillColor(...navyDeep);
+    doc.rect(0, 0, pageW, pageH, 'F');
+
+    // Faint corner ornament rings (repeated arcs) for texture
+    doc.setDrawColor(...navy);
+    for (let rIdx = 0; rIdx < 3; rIdx++) {
+      doc.setLineWidth(0.4);
+      doc.circle(-10, -10, 30 + rIdx * 14, 'S');
+      doc.circle(pageW + 10, pageH + 10, 30 + rIdx * 14, 'S');
+    }
+
+    // ---- Outer gold frame ----
+    const frameM = 8;
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(1.1);
+    doc.roundedRect(frameM, frameM, pageW - frameM * 2, pageH - frameM * 2, 3, 3, 'S');
+    doc.setLineWidth(0.35);
+    doc.roundedRect(frameM + 2.2, frameM + 2.2, pageW - (frameM + 2.2) * 2, pageH - (frameM + 2.2) * 2, 2, 2, 'S');
+
+    // Corner flourish crosses
+    const drawCorner = (cx, cy, flipX, flipY) => {
+      const s = 9;
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.7);
+      doc.line(cx, cy, cx + s * flipX, cy);
+      doc.line(cx, cy, cx, cy + s * flipY);
+      doc.setFillColor(...gold);
+      doc.circle(cx, cy, 1.1, 'F');
+    };
+    drawCorner(frameM + 5, frameM + 5, 1, 1);
+    drawCorner(pageW - frameM - 5, frameM + 5, -1, 1);
+    drawCorner(frameM + 5, pageH - frameM - 5, 1, -1);
+    drawCorner(pageW - frameM - 5, pageH - frameM - 5, -1, -1);
+
+    // ---- Crest / monogram medallion ----
+    const crestY = 26;
+    doc.setFillColor(...gold);
+    doc.circle(pageW / 2, crestY, 12, 'F');
+    doc.setFillColor(...navyDeep);
+    doc.circle(pageW / 2, crestY, 9.6, 'F');
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.circle(pageW / 2, crestY, 9.6, 'S');
+    doc.setTextColor(...gold);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(15);
+    doc.text('SA', pageW / 2, crestY + 4.2, { align: 'center' });
+
+    // ---- Airline title ----
+    doc.setTextColor(...gold);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(27);
+    doc.text('S H A H E E N   A I R L I N E S', pageW / 2, crestY + 24, { align: 'center' });
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.line(pageW / 2 - 46, crestY + 28.5, pageW / 2 + 46, crestY + 28.5);
+    doc.setTextColor(...goldSoft);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9.5);
+    doc.text('R O Y A L   E - T I C K E T   &   B O A R D I N G   P A S S', pageW / 2, crestY + 35, { align: 'center' });
+
+    // ================= MAIN IVORY CARD =================
+    const cardX = 18, cardW = pageW - 36;
+    const cardY = 68, cardH = 168 + extraSeatH;
+    doc.setFillColor(...ivory);
+    doc.roundedRect(cardX, cardY, cardW, cardH, 5, 5, 'F');
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.8);
+    doc.roundedRect(cardX, cardY, cardW, cardH, 5, 5, 'S');
+    doc.setDrawColor(...navy);
+    doc.setLineWidth(0.25);
+    doc.roundedRect(cardX + 2, cardY + 2, cardW - 4, cardH - 4, 4, 4, 'S');
+
+    // Gold ribbon banner across the card top
+    doc.setFillColor(...navy);
+    doc.rect(cardX + 2, cardY + 2, cardW - 4, 12, 'F');
+    doc.setTextColor(...gold);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10.5);
+    doc.text('PASSENGER  ITINERARY', cardX + cardW / 2, cardY + 10.3, { align: 'center' });
+
+    const leftX = cardX + 14;
+    const rightX = cardX + cardW / 2 + 8;
+    let cy = cardY + 26;
+
+    const drawLabel = (text, x, y) => {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...gold);
+      doc.text(text.toUpperCase(), x, y);
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.2);
+      doc.line(x, y + 1.4, x + 34, y + 1.4);
+    };
+    const drawValue = (text, x, y, size, maxW) => {
+      doc.setFont('times', 'bold');
+      doc.setFontSize(size || 13);
+      doc.setTextColor(...navyDeep);
+      doc.text(String(text), x, y, maxW ? { maxWidth: maxW } : undefined);
+    };
+
+    drawLabel('Passenger Name', leftX, cy);
+    drawValue(name, leftX, cy + 8, 14, 85);
+    drawLabel('Email Address', rightX, cy);
+    drawValue(email, rightX, cy + 8, 10, 78);
+
+    cy += 20;
+    drawLabel('Phone Number', leftX, cy);
+    drawValue(phone, leftX, cy + 8, 12, 85);
+    drawLabel('Travel Date', rightX, cy);
+    drawValue(formattedDate, rightX, cy + 8, 11, 78);
+
+    // Gold divider with diamond studs
+    cy += 18;
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.4);
+    doc.line(leftX, cy, cardX + cardW - 14, cy);
+    [leftX, cardX + cardW / 2, cardX + cardW - 14].forEach(dx => {
+      doc.setFillColor(...gold);
+      doc.circle(dx, cy, 1.2, 'F');
+    });
+
+    // ---- Route block (full width, so long city names never collide) ----
+    cy += 16;
+    drawLabel('Route', leftX, cy);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(...navyDeep);
+    doc.text(from, leftX, cy + 10);
+    const fromW = doc.getTextWidth(from);
+    const arrowX = leftX + fromW + 8;
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.9);
+    doc.line(arrowX, cy + 7.5, arrowX + 24, cy + 7.5);
+    doc.setFillColor(...gold);
+    doc.triangle(arrowX + 24, cy + 5, arrowX + 24, cy + 10, arrowX + 29, cy + 7.5, 'F');
+    doc.text(to, arrowX + 34, cy + 10);
+
+    // Class badge, right-aligned on the same row as the route. Width is
+    // measured from the actual label text so "Business Class" / "First
+    // Class" never overflow the box the way a fixed width would.
+    const classBadgeLabel = selectedClasses.length > 1 ? ticketClassLabel : `${ticketClassLabel} Class`;
+    doc.setFont('times', 'bold');
+    doc.setFontSize(11);
+    const classBadgeTextW = doc.getTextWidth(classBadgeLabel);
+    const classBadgeH = 14;
+    const classBadgeW = Math.max(46, classBadgeTextW + 12);
+    const classBadgeX = cardX + cardW - 14 - classBadgeW;
+    doc.setFillColor(...navy);
+    doc.roundedRect(classBadgeX, cy - 3, classBadgeW, classBadgeH, 3, 3, 'F');
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(classBadgeX, cy - 3, classBadgeW, classBadgeH, 3, 3, 'S');
+    doc.setTextColor(...gold);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(11);
+    doc.text(classBadgeLabel, classBadgeX + classBadgeW / 2, cy + 6, { align: 'center' });
+
+    // ---- Seat Number(s): dedicated full-width block so it can wrap to
+    // as many lines as needed without ever touching the fields below ----
+    cy += 20;
+    drawLabel(seats > 1 ? 'Seat Numbers' : 'Seat Number', leftX, cy);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(seatFontSize);
+    doc.setTextColor(...navyDeep);
+    doc.text(seatLines, leftX, cy + 8, { maxWidth: seatBlockW });
+
+    // Advance cy past every wrapped seat line before starting the next row
+    cy += 8 + seatBlockH + 6;
+
+    // ---- Flight Duration / Departure / Arrival row (3 equal columns) ----
+    const col1X = leftX;
+    const col2X = leftX + (cardW - 28) / 3;
+    const col3X = leftX + ((cardW - 28) / 3) * 2;
+
+    drawLabel('Flight Duration', col1X, cy);
+    drawValue(flightDuration, col1X, cy + 8, 11, (cardW - 28) / 3 - 6);
+    drawLabel('Departure Time', col2X, cy);
+    drawValue(depTime, col2X, cy + 8, 11, (cardW - 28) / 3 - 6);
+    drawLabel('Arrival Time', col3X, cy);
+    drawValue(arrTime, col3X, cy + 8, 11, (cardW - 28) / 3 - 6);
+
+    // ---- Notch cutouts + perforation ----
+    const dividerY = cy + 16;
+    doc.setFillColor(...navyDeep);
+    doc.circle(cardX, dividerY, 4.4, 'F');
+    doc.circle(cardX + cardW, dividerY, 4.4, 'F');
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    let dashX = cardX + 8;
+    const dashEnd = cardX + cardW - 8;
+    while (dashX < dashEnd) {
+      doc.line(dashX, dividerY, Math.min(dashX + 2.4, dashEnd), dividerY);
+      dashX += 4.4;
+    }
+
+    // ---- Price / total plate ----
+    const priceY = dividerY + 12;
+    drawLabel(selectedClasses.length > 1 ? `${ticketClassLabel} Fare` : `${ticketClassLabel} Class Fare`, leftX, priceY);
+    doc.setFont('times', 'normal');
+    doc.setFontSize(11.5);
+    doc.setTextColor(...navyDeep);
+    doc.text(priceRangeLabel, leftX, priceY + 8);
+
+    const plateX = cardX + cardW / 2 - 4, plateW = cardW / 2 - 18;
+    doc.setFillColor(...navy);
+    doc.roundedRect(plateX, priceY - 7, plateW, 20, 3, 3, 'F');
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(plateX, priceY - 7, plateW, 20, 3, 3, 'S');
+    doc.setTextColor(...goldSoft);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.text('TOTAL AMOUNT', plateX + 6, priceY);
+    doc.setTextColor(...gold);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(17);
+    doc.text(`PKR ${totalPrice.toLocaleString()}`, plateX + plateW - 6, priceY + 9, { align: 'right' });
+
+    // ================= FOOTER SEAL =================
+    const footerY = cardY + cardH + 18;
+    doc.setTextColor(...slate);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.text('S C A N   A T   G A T E', pageW / 2, footerY - 6, { align: 'center' });
+
+    doc.setDrawColor(...gold);
+    const barCount = 46, barSpacing = pageW < 250 ? 1.65 : 1.9;
+    const barcodeWidth = (barCount - 1) * barSpacing;
+    let barX = pageW / 2 - barcodeWidth / 2;
+    for (let i = 0; i < barCount; i++) {
+      doc.setLineWidth(i % 4 === 0 ? 1.2 : 0.45);
+      doc.line(barX, footerY, barX, footerY + 9);
+      barX += barSpacing;
+    }
+
+    doc.setFont('times', 'italic');
+    doc.setFontSize(12);
+    doc.setTextColor(...gold);
+    doc.text('Thank you for flying Shaheen Airlines', pageW / 2, footerY + 20, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...slate);
+    doc.text('This is a computer-generated e-ticket and does not require a signature.', pageW / 2, footerY + 26, { align: 'center' });
+
+    doc.save(`Ticket_${name.replace(/\s+/g, '_')}.pdf`);
+  }
+
+  function downloadSchedule() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape' });
+
+    const navy      = [10, 22, 46];
+    const navyDeep  = [5, 12, 28];
+    const gold      = [212, 175, 55];
+    const goldSoft  = [244, 220, 150];
+    const ivory     = [255, 253, 246];
+    const altRow    = [246, 238, 216];
+    const slate     = [110, 118, 135];
+
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    const headers = ["Flight", "From", "To", "Departure", "Arrival", "Price (PKR)"];
+    const colWidths = [30, 46, 46, 38, 38, 48];
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageW - tableWidth) / 2;
+
+    const drawFrame = () => {
+      doc.setFillColor(...navyDeep);
+      doc.rect(0, 0, pageW, pageH, 'F');
+      const frameM = 7;
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(1);
+      doc.roundedRect(frameM, frameM, pageW - frameM * 2, pageH - frameM * 2, 3, 3, 'S');
+      doc.setLineWidth(0.3);
+      doc.roundedRect(frameM + 2, frameM + 2, pageW - (frameM + 2) * 2, pageH - (frameM + 2) * 2, 2, 2, 'S');
+    };
+
+    const drawHeaderBand = () => {
+      doc.setFillColor(...gold);
+      doc.circle(pageW / 2, 15, 8, 'F');
+      doc.setFillColor(...navyDeep);
+      doc.circle(pageW / 2, 15, 6.4, 'F');
+      doc.setTextColor(...gold);
+      doc.setFont('times', 'bold');
+      doc.setFontSize(10);
+      doc.text('SA', pageW / 2, 17.5, { align: 'center' });
+
+      doc.setTextColor(...gold);
+      doc.setFont('times', 'bold');
+      doc.setFontSize(20);
+      doc.text('S H A H E E N   A I R L I N E S', pageW / 2, 30, { align: 'center' });
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.4);
+      doc.line(pageW / 2 - 55, 33, pageW / 2 + 55, 33);
+      doc.setTextColor(...goldSoft);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.text('O F F I C I A L   F L I G H T   S C H E D U L E', pageW / 2, 39, { align: 'center' });
+      doc.setFontSize(7.5);
+      doc.setTextColor(...slate);
+      doc.text(`Generated on ${new Date().toDateString()}`, pageW / 2, 44.5, { align: 'center' });
+    };
+
+    drawFrame();
+    drawHeaderBand();
+
+    let y = 58;
+    const rowHeight = 10.5;
+
+    const drawTableHeader = () => {
+      doc.setFillColor(...navy);
+      doc.roundedRect(startX, y - 7, tableWidth, rowHeight + 2, 2, 2, 'F');
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(startX, y - 7, tableWidth, rowHeight + 2, 2, 2, 'S');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9.5);
+      doc.setTextColor(...gold);
+      let hx = startX;
+      headers.forEach((h, i) => {
+        doc.text(h.toUpperCase(), hx + colWidths[i] / 2, y, { align: 'center' });
+        hx += colWidths[i];
+      });
+      y += rowHeight + 4;
+    };
+
+    drawTableHeader();
+
+    const drawDataRow = (cells, idx) => {
+      if (idx % 2 === 1) {
+        doc.setFillColor(...altRow);
+        doc.rect(startX, y - 6.5, tableWidth, rowHeight, 'F');
+      } else {
+        doc.setFillColor(...ivory);
+        doc.rect(startX, y - 6.5, tableWidth, rowHeight, 'F');
+      }
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.15);
+      doc.rect(startX, y - 6.5, tableWidth, rowHeight, 'S');
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(...navyDeep);
+      let x = startX;
+      cells.forEach((cell, i) => {
+        if (i === 0) {
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(...navy);
+        } else if (i === 5) {
+          doc.setFont('times', 'bold');
+          doc.setTextColor(150, 110, 20);
+        } else {
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(50, 55, 70);
+        }
+        const text = i === 5
+          ? `PKR ${Number(cell).toLocaleString()}`
+          : (i === 3 || i === 4) ? formatTime12(cell) : String(cell);
+        doc.text(text, x + colWidths[i] / 2, y, { align: 'center', maxWidth: colWidths[i] - 4 });
+        x += colWidths[i];
+      });
+      y += rowHeight;
+    };
+
+    allFlights.forEach((cells, idx) => {
+      if (y > pageH - 24) {
+        doc.addPage('landscape');
+        drawFrame();
+        y = 22;
+        drawTableHeader();
+      }
+      drawDataRow(cells, idx);
+    });
+
+    doc.setFont('times', 'italic');
+    doc.setFontSize(11);
+    doc.setTextColor(...gold);
+    doc.text('Thank you for choosing Shaheen Airlines — Fly Royal, Fly Shaheen', pageW / 2, y + 12, { align: 'center' });
+
+    // ---- Page numbers on every page ----
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= pageCount; p++) {
+      doc.setPage(p);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...slate);
+      doc.text(`Page ${p} of ${pageCount}`, pageW - 16, pageH - 10, { align: 'right' });
+    }
+
+    doc.save('Shaheen_Flight_Schedule.pdf');
+  }
+</script>
+
+</body>
+</html>

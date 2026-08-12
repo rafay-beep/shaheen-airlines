@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shaheen Airlines</title>
+    <style>
+        :root {
+            --dark-blue: #03366d;
+            --golden: #f4c542;
+        }
+
+        body {
+            font-family: 'Times New Roman';
+            background-image: url('https://static.vecteezy.com/system/resources/previews/027/102/875/large_2x/outline-of-family-and-plane-free-photo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 130px;
+            color: #ffffff;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            text-decoration: none;
+            color: rgb(46, 88, 179);
+            background-color: var(--golden);
+            display: inline-block;
+            padding: 15px 40px;
+            margin-top: 30px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 4px solid var(--dark-blue);
+            cursor: default;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        h1:hover {
+            transform: translateY(3px);
+            background-color: #ffe066;
+            color: var(--dark-blue);
+            box-shadow: 0 8px 25px rgba(244, 197, 66, 0.4);
+            border-bottom-color: rgb(46, 88, 179);
+        }
+
+
+        .bottom-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: var(--golden);
+            color: var(--dark-blue);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        #contact-button {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-wrap: wrap-reverse;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .bottom-button:hover {
+            background-color: #ffe066;
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .bottom-button:active {
+            transform: scale(0.96);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #contact-info {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border: 1px solid var(--golden);
+            border-radius: 5px;
+            text-align: left;
+            z-index: 100;
+        }
+
+        /* ===================== NEW ABOUT-US CONTENT SECTIONS ===================== */
+
+        .section-heading-wrap {
+            text-align: center;
+        }
+
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: var(--dark-blue);
+            background-color: var(--golden);
+            display: inline-block;
+            padding: 10px 32px;
+            border-radius: 6px;
+            margin: 55px auto 22px auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .section-heading:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .content-panel {
+            background-color: rgba(3, 54, 109, 0.85);
+            padding: 30px 40px;
+            border: 2px solid var(--golden);
+            border-radius: 12px;
+            margin: 0 auto;
+            width: 80%;
+            max-width: 850px;
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .content-panel:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.6);
+            border-color: #ffe066;
+        }
+
+        /* ---- Timeline ---- */
+        .timeline {
+            position: relative;
+            max-width: 620px;
+            margin: 0 auto;
+            padding-left: 34px;
+            text-align: left;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: var(--golden);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--golden);
+            border: 3px solid rgba(3, 54, 109, 0.95);
+        }
+
+        .timeline-year {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--golden);
+            margin-bottom: 2px;
+        }
+
+        .timeline-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #f2f2f2;
+            text-align: left;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            margin: 0;
+        }
+
+        /* ---- CEO Message ---- */
+        .ceo-message {
+            text-align: left;
+        }
+
+        .ceo-quote-mark {
+            font-family: 'Playfair Display', serif;
+            font-size: 60px;
+            color: var(--golden);
+            line-height: 1;
+            margin-bottom: -8px;
+        }
+
+        .ceo-message p {
+            font-size: 18px;
+            line-height: 1.7;
+            text-align: left;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            margin: 0 0 14px 0;
+        }
+
+        .ceo-signoff {
+            font-style: italic;
+            color: var(--golden);
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px !important;
+        }
+
+        /* ---- Company Values & Awards ---- */
+        .values-grid,
+        .awards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .value-card,
+        .award-card {
+            background: rgba(3, 54, 109, 0.55);
+            border: 1px solid rgba(244, 197, 66, 0.5);
+            border-radius: 10px;
+            padding: 22px 18px;
+            width: 210px;
+            text-align: center;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .value-card:hover,
+        .award-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+            border-color: var(--golden);
+        }
+
+        .value-icon,
+        .award-icon {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .value-card h3,
+        .award-card h3 {
+            font-size: 18px;
+            margin: 0 0 8px 0;
+            color: var(--golden);
+        }
+
+        .value-card p {
+            font-size: 14px;
+            line-height: 1.45;
+            color: #f2f2f2;
+            margin: 0;
+            text-shadow: none;
+            text-align: center;
+        }
+
+        .award-year {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* ---- Company Facts ---- */
+        .facts-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 35px;
+            padding: 0 20px;
+        }
+
+        .fact-block {
+            text-align: center;
+            width: 150px;
+            background-color: rgba(3, 54, 109, 0.55);
+            border-radius: 12px;
+            padding: 18px 15px;
+            border: 1px solid rgba(244, 197, 66, 0.5);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .fact-block:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5);
+            border-color: var(--golden);
+        }
+
+        .fact-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--golden);
+            line-height: 1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .fact-label {
+            font-size: 15px;
+            margin-top: 8px;
+            color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Shaheen Airlines.</h1>
+    <br>
+
+    <!-- ===================== OUR JOURNEY (TIMELINE) ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Our Journey</h2>
+    </div>
+    <div class="content-panel" id="journey-panel">
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">1993</div>
+                <div class="timeline-title">Company Founded</div>
+                <p class="timeline-desc">Shaheen Airlines took flight for the first time, launching domestic services from Karachi with a single aircraft and a promise to connect Pakistan's cities safely and affordably.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">2005</div>
+                <div class="timeline-title">International Flights Started</div>
+                <p class="timeline-desc">We spread our wings beyond Pakistan's borders, launching our first international routes into the Middle East and opening new opportunities for travelers and businesses alike.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">2012</div>
+                <div class="timeline-title">Fleet Expanded</div>
+                <p class="timeline-desc">Our growing fleet welcomed new Airbus and Boeing aircraft, letting us add more routes, more frequent departures, and more comfort for passengers across our network.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">2020</div>
+                <div class="timeline-title">Digital Booking System</div>
+                <p class="timeline-desc">We launched our online booking platform, giving passengers the ability to search flights, choose their seats, and book tickets from anywhere in just a few clicks.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">2026</div>
+                <div class="timeline-title">1 Million Passengers</div>
+                <p class="timeline-desc">We proudly welcomed our one millionth passenger, a milestone built on three decades of trust, safety, and dedicated service to everyone who flies with us.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== OUR FLEET (FLEET GALLERY) ===================== -->
+    <!-- ===================== CEO MESSAGE ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">A Message From Our CEO</h2>
+    </div>
+    <div class="content-panel ceo-message" id="ceo-panel">
+        <div class="ceo-quote-mark">&ldquo;</div>
+        <p>Welcome to Shaheen Airlines. For more than three decades, we have been driven by a single promise: to get you where you need to go safely, comfortably, and on time.</p>
+        <p>Our mission is to provide safe, comfortable and affordable travel to every passenger who chooses to fly with us, whether you're visiting family, closing a business deal, or exploring somewhere new for the very first time.</p>
+        <p>None of this would be possible without the dedication of our pilots, cabin crew, engineers, and ground staff, who work around the clock to keep Shaheen Airlines flying. Thank you for trusting us with your journey.</p>
+        <p class="ceo-signoff">— CEO, Shaheen Airlines</p>
+    </div>
+
+    <!-- ===================== COMPANY VALUES ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Our Values</h2>
+    </div>
+    <div class="values-grid" id="values-panel">
+        <div class="value-card">
+            <div class="value-icon">🛡️</div>
+            <h3>Safety</h3>
+            <p>Every flight, every time. Rigorous maintenance standards and highly trained crews are at the heart of everything we do.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon">😊</div>
+            <h3>Customer Satisfaction</h3>
+            <p>From the moment you book to the moment you land, we design every step of the journey around your comfort.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon">🌍</div>
+            <h3>Sustainability</h3>
+            <p>We're investing in modern, fuel-efficient aircraft and greener operations to help protect the skies we fly through.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon">✈</div>
+            <h3>Innovation</h3>
+            <p>From digital booking to modern cabins, we keep moving forward with technology that makes flying simpler.</p>
+        </div>
+    </div>
+
+    <!-- ===================== AWARDS ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Awards &amp; Recognition</h2>
+    </div>
+    <div class="awards-grid" id="awards-panel">
+        <div class="award-card">
+            <div class="award-icon">🏆</div>
+            <h3>Best Domestic Airline</h3>
+            <p class="award-year">2024</p>
+        </div>
+        <div class="award-card">
+            <div class="award-icon">🏆</div>
+            <h3>Customer Choice Award</h3>
+            <p class="award-year">2025</p>
+        </div>
+        <div class="award-card">
+            <div class="award-icon">🏆</div>
+            <h3>Safety Excellence</h3>
+            <p class="award-year">2026</p>
+        </div>
+    </div>
+
+    <!-- ===================== COMPANY FACTS ===================== -->
+    <div class="section-heading-wrap">
+        <h2 class="section-heading">Shaheen By The Numbers</h2>
+    </div>
+    <div class="facts-grid" id="facts-panel">
+        <div class="fact-block">
+            <div class="fact-number">18</div>
+            <div class="fact-label">Aircraft</div>
+        </div>
+        <div class="fact-block">
+            <div class="fact-number">1M+</div>
+            <div class="fact-label">Passengers</div>
+        </div>
+        <div class="fact-block">
+            <div class="fact-number">12</div>
+            <div class="fact-label">Destinations</div>
+        </div>
+        <div class="fact-block">
+            <div class="fact-number">33</div>
+            <div class="fact-label">Years of Experience</div>
+        </div>
+    </div>
+
+    <div id="contact-info">
+        <strong>Email:</strong> ShaheenAirlines@gmail.com<br>
+        <strong>Phone:</strong> 0327-9736400
+    </div>
+
+    <button class="bottom-button" id="contact-button" onclick="toggleContact()">
+    Contact Us
+</button>
+
+<div class="bottom-nav">
+    <a href="index.html">
+        <button class="bottom-button">
+            Home
+        </button>
+    </a>
+
+    <a href="booking.html">
+        <button class="bottom-button">
+            Schedule & Book Tickets
+        </button>
+    </a>
+
+    <a href="experience.html">
+        <button class="bottom-button">
+            In-Flight Experience
+        </button>
+    </a>
+</div>
+
+    <script>
+        function toggleContact() {
+            const contactInfo = document.getElementById("contact-info");
+            contactInfo.style.display = contactInfo.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</body>
+
+</html>
