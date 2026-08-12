@@ -660,7 +660,7 @@
             <div class="feature-photo">
                 <img id="cockpitPhoto" src="cockpit.jpg" alt="Flight Deck">
             </div>
-            <div class="feature-text">
+            <div class="feature-text" id="cockpitText">
                 <p>Every Shaheen Airlines flight is led by a two-pilot crew working from a modern glass cockpit, with digital flight displays, weather radar, and an autopilot &amp; flight management system that keeps every leg smooth from pushback to touchdown.</p>
                 <p>Curious passengers are welcome to peek in during boarding on select flights &mdash; ask your cabin crew if a flight deck visit is available before departure.</p>
             </div>
@@ -681,7 +681,7 @@
             <div class="feature-photo">
                 <img id="loungePhoto" src="lounge.jpg" alt="Lounge Seating">
             </div>
-            <div class="feature-text">
+            <div class="feature-text" id="loungeText">
                 <p>Passengers can relax during the flight in our dedicated onboard lounge, featuring comfortable seating, complimentary refreshments, and a spacious atmosphere to stretch, socialize, or unwind away from their seats.</p>
                 <p>On our long-haul Boeing 777, passengers can step into the onboard social lounge — a shared space to stretch, chat, or enjoy a drink mid-flight before returning to their seats and continuing their journey in comfort.</p>
             </div>
@@ -974,9 +974,21 @@
 
         /* ===================== COCKPIT VIEW ===================== */
         const cockpitImages = {
-            deck: { src: 'cockpit.jpg', alt: 'Flight Deck' },
-            panel: { src: 'control panel.jpg', alt: 'Cockpit control panel close-up' },
-            window: { src: 'window view.jpg', alt: 'View from the cockpit window above the clouds' }
+            deck: {
+                src: 'cockpit.jpg',
+                alt: 'Flight Deck',
+                desc: '<p>Every Shaheen Airlines flight is led by a two-pilot crew working from a modern glass cockpit, with digital flight displays, weather radar, and an autopilot &amp; flight management system that keeps every leg smooth from pushback to touchdown.</p><p>Curious passengers are welcome to peek in during boarding on select flights &mdash; ask your cabin crew if a flight deck visit is available before departure.</p>'
+            },
+            panel: {
+                src: 'control panel.jpg',
+                alt: 'Cockpit control panel close-up',
+                desc: '<p>A closer look at the instrument panel our pilots rely on throughout the flight &mdash; digital altimeters, navigation displays, and system diagnostics all within easy reach. Every gauge and switch is designed for quick readability, so the crew can respond calmly and precisely to whatever the flight calls for.</p>'
+            },
+            window: {
+                src: 'window view.jpg',
+                alt: 'View from the cockpit window above the clouds',
+                desc: '<p>From the flight deck, our pilots get a vantage point few passengers ever see &mdash; clear skies stretching above the clouds, with sweeping views on sunrise and sunset departures. It&rsquo;s one of the quiet perks of the job, and a reminder of just how far above the world a flight really takes you.</p>'
+            }
         };
 
         function selectCockpitImage(key) {
@@ -987,13 +999,26 @@
             const img = document.getElementById('cockpitPhoto');
             img.src = data.src;
             img.alt = data.alt;
+            document.getElementById('cockpitText').innerHTML = data.desc;
         }
 
         /* ===================== ONBOARD LOUNGES ===================== */
         const loungeImages = {
-            seating: { src: 'lounge.jpg', alt: 'Lounge Seating' },
-            bar: { src: 'onboard bar.jpg', alt: 'Lounge bar and refreshments area' },
-            window: { src: 'lounge seating.jpg', alt: 'Lounge seating with a window view of the tarmac' }
+            seating: {
+                src: 'lounge.jpg',
+                alt: 'Lounge Seating',
+                desc: '<p>Passengers can relax during the flight in our dedicated onboard lounge, featuring comfortable seating, complimentary refreshments, and a spacious atmosphere to stretch, socialize, or unwind away from their seats.</p><p>On our long-haul Boeing 777, passengers can step into the onboard social lounge &mdash; a shared space to stretch, chat, or enjoy a drink mid-flight before returning to their seats and continuing their journey in comfort.</p>'
+            },
+            bar: {
+                src: 'onboard bar.jpg',
+                alt: 'Lounge bar and refreshments area',
+                desc: '<p>The onboard bar keeps a rotating selection of drinks and light bites on hand throughout the flight, from soft drinks and juices to a curated selection for our Business and First Class guests. It&rsquo;s a natural gathering spot mid-flight &mdash; pull up a stool, chat with fellow travelers, or grab a refill on your way back to your seat.</p>'
+            },
+            window: {
+                src: 'lounge seating.jpg',
+                alt: 'Quiet lounge sitting area',
+                desc: '<p>Beyond the main lounge, a quieter sitting area offers plush individual seating for passengers who&rsquo;d rather unwind on their own &mdash; perfect for reading, catching up on work, or resting before landing. Softer lighting and lower seating make it a more private corner of the cabin.</p>'
+            }
         };
 
         function selectLoungeImage(key) {
@@ -1004,6 +1029,7 @@
             const img = document.getElementById('loungePhoto');
             img.src = data.src;
             img.alt = data.alt;
+            document.getElementById('loungeText').innerHTML = data.desc;
         }
 
         /* ===================== FLEET TOUR ===================== */
