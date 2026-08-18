@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKL3GMDXMS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CKL3GMDXMS');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shaheen Airlines - Schedule & Book Tickets</title>
@@ -1176,6 +1167,28 @@ function resetSearch() {
     const depTime = matchedFlight ? formatTime12(matchedFlight[3]) : 'N/A';
     const arrTime = matchedFlight ? formatTime12(matchedFlight[4]) : 'N/A';
     const flightDuration = matchedFlight ? calcDuration(matchedFlight[3], matchedFlight[4]) : 'N/A';
+
+    // Save this booking to the database in the background. This never
+    // blocks or delays the PDF below — if the backend or XAMPP's MySQL
+    // isn't running, the ticket still generates normally and the error
+    // is just logged to the console.
+    fetch('http://localhost:3000/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullName: name,
+        email: email,
+        phone: phone,
+        flightCode: matchedFlight ? matchedFlight[0] : null,
+        fromCity: from,
+        toCity: to,
+        travelDate: date,
+        seatsCount: seats,
+        seatList: seatList,
+        cabinClass: ticketClassLabel,
+        totalPrice: totalPrice
+      })
+    }).catch(err => console.warn('Could not save booking to database:', err.message));
 
     // ================= ROYAL PALETTE =================
     const navy      = [10, 22, 46];
